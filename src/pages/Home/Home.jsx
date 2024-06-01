@@ -1,5 +1,7 @@
 import { StyledHome } from './StyledHome';
 
-export const Home = () => {
+const Home = () => {
   return <StyledHome>Hello My Team!</StyledHome>;
 };
+
+export { Home };

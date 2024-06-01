@@ -1,8 +1,8 @@
-import { Home } from '@pages/Home';
-import { Login } from '@pages/Login';
+import { Home } from '@/pages/Home';
+import { Login } from '@/pages/Login';
 import { createBrowserRouter } from 'react-router-dom';
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />
@@ -12,3 +12,5 @@ export const router = createBrowserRouter([
     element: <Login />
   }
 ]);
+
+export { router };

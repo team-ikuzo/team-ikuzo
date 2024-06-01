@@ -17,5 +17,5 @@ const sampleSlice = createSlice({
   }
 });
 
-export default sampleSlice;
+export { sampleSlice };
 export const { setData } = sampleSlice.actions;
