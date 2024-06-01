@@ -37,6 +37,13 @@ export const StContent = styled.p`
   color: white;
 `;
 
+export const StHr = styled.hr`
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  border-radius: 2px;
+`;
+
 export const StProfileImage = styled.img``;
 
 export const StProfileDummyImage = styled.div`

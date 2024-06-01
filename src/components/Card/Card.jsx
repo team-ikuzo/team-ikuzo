@@ -4,23 +4,14 @@ import {
   StCount,
   StCountBox,
   StHashtags,
+  StHr,
   StInfo,
   StNameCard,
   StProfileDummyImage,
   StTitle
 } from './StyledCard';
 
-const Card = () => {
-  const post = {
-    hashtags: ['Front-end', 'Back-end', 'Designer', 'UI Designer'],
-    title: 'Hello World!',
-    body: 'Hello My Team!!! Occaecat dolore ex minim duis do exercitation aute excepteur incididunt do dolore ad. Occaecat dolore ex minim duis do exercitation aute excepteur incididunt do dolore ad. Occaecat dolore ex minim duis do exercitation aute excepteur incididunt do dolore ad.',
-    name: 'James',
-    job: 'Web Developer',
-    likesCount: 126,
-    commentsCount: 12
-  };
-
+const Card = ({ post }) => {
   return (
     <StCard>
       <StHashtags>
@@ -30,6 +21,7 @@ const Card = () => {
       </StHashtags>
       <StTitle>{post.title}</StTitle>
       <StContent>{post.body}</StContent>
+      <StHr />
       <StNameCard>
         <StProfileDummyImage />
         <StInfo>
