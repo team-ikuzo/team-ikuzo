@@ -10,7 +10,9 @@ const authSlice = createSlice({
   reducers: {
     setSignIn: (state, action) => {
       // action.payload =>
+      console.log(action.payload);
       state.signIn = action.payload;
+      console.log(state.signIn);
     }
   }
 });

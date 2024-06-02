@@ -1,6 +1,9 @@
 import { supabase } from '@/supabase';
+import { useDispatch } from 'react-redux';
 import { StyledLogin } from './StyledLogin';
+
 const Login = () => {
+  const dispatch = useDispatch();
   const signInWithGithub = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'github',

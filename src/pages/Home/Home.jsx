@@ -1,33 +1,18 @@
 import { Card } from '@/components/Card';
 import dummy from '@/dummy/dummy.json';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSignIn } from '../../redux/authSlice';
 import { supabase } from '../../supabase';
 import { StyledHome } from './StyledHome';
 
 const Home = () => {
-  const navigate = useNavigate();
-  const [signIn, setSignIn] = useState(false);
-  const signInWithGithub = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'github'
-    });
-  };
-
-  const checkSignIn = async () => {
-    const session = await supabase.auth.getSession();
-    console.log(session);
-    const isSignIn = !!session.data.session;
-    setSignIn(isSignIn);
-  };
+  const dispatch = useDispatch();
+  const signIn = useSelector((state) => state.auth.signIn);
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    dispatch(setSignIn(false));
   };
-
-  useEffect(() => {
-    checkSignIn();
-  }, []);
 
   return (
     <>
