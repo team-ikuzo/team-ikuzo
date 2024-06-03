@@ -11,6 +11,7 @@ const createPostSlice = createSlice({
     likesCount: 0,
     commentsCount: 2,
     notices: "",
+    image: null,
   },
 
   reducers: {
@@ -51,6 +52,10 @@ const createPostSlice = createSlice({
     setNotices: (state, action) => {
       state.notices = action.payload;
     },
+
+    setImage: (state, action) => {
+      state.image = action.payload;
+    },
   },
 });
 
@@ -64,5 +69,6 @@ export const {
   setLikesCount,
   setCommentsCount,
   setNotices,
+  setImage,
 } = createPostSlice.actions;
 export default createPostSlice.reducer;

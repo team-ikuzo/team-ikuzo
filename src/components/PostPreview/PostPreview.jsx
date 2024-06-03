@@ -7,6 +7,7 @@ import {
   StTitle,
   StBody,
   StNotices,
+  StImageWrapper,
 } from "./StyledPostPreview";
 import {
   setHashtags,
@@ -23,6 +24,7 @@ const PostPreview = () => {
   const likes = useSelector((state) => state.postSlice.likesCount);
   const commentsCount = useSelector((state) => state.postSlice.commentsCount);
   const notices = useSelector((state) => state.postSlice.notices);
+  const imageUrl = useSelector((state) => state.postSlice.image);
 
   const StButton = {
     border: "none",
@@ -55,7 +57,19 @@ const PostPreview = () => {
         </StHashtags>
       </div>
 
-      <StBody>{body}</StBody>
+      <StBody>
+        {body.split("\n").map((line) => {
+          return (
+            <span>
+              {line}
+              <br />
+            </span>
+          );
+        })}
+        <StImageWrapper>
+          {imageUrl && <img src={imageUrl} alt="Uploaded" />}
+        </StImageWrapper>
+      </StBody>
 
       <StNotices>{notices}</StNotices>
     </StPostPreview>

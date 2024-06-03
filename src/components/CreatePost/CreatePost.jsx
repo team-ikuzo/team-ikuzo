@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setBody,
   setHashtags,
-  setLikesCount,
+  setImage,
   setNotices,
   setTitle,
 } from "../../redux/slices/createPostSlice";
@@ -18,6 +18,7 @@ import {
   StNotices,
   StSelect,
   StTitle,
+  StImageUpload,
 } from "./StyledCreatePost";
 
 const CreatePost = () => {
@@ -30,11 +31,11 @@ const CreatePost = () => {
   const likes = useSelector((state) => state.postSlice.likesCount);
   const commentsCount = useSelector((state) => state.postSlice.commentsCount);
   const notices = useSelector((state) => state.postSlice.notices);
-
+  const image = useSelector((state) => state.postSlice.image);
   return (
     <OuterContainer>
       <InnerContainer>
-        <LeftPanel>
+        <RightPanel>
           <StTitle>
             [제목]
             <input
@@ -46,7 +47,7 @@ const CreatePost = () => {
           </StTitle>
 
           <StSelect>
-            [필수스택]
+            [요구스택]
             <br />
             <select
               name="hashtag"
@@ -68,7 +69,6 @@ const CreatePost = () => {
               <option value="Unity">Unity</option>
               <option value="C">C</option>
             </select>
-            {console.log(hashtags)}
           </StSelect>
 
           <StNotices>
@@ -80,15 +80,14 @@ const CreatePost = () => {
               onChange={(e) => dispatch(setNotices(e.target.value))}
             />
           </StNotices>
-        </LeftPanel>
-
-        <RightPanel>
-          <PostPreview />
         </RightPanel>
+
+        <LeftPanel>
+          <PostPreview />
+        </LeftPanel>
 
         <BottomPanel>
           <StBody>
-            [내용] <br />
             <textarea
               type="text"
               placeholder="내용을 입력해주세요"
@@ -96,6 +95,17 @@ const CreatePost = () => {
               onChange={(e) => dispatch(setBody(e.target.value))}
             />
           </StBody>
+          <StImageUpload>
+            <label htmlFor="imageUpload">이미지 첨부</label>
+            <input
+              type="file"
+              id="imageUpload"
+              name="imageUpload"
+              onChange={(e) =>
+                dispatch(setImage(URL.createObjectURL(e.target.files[0])))
+              }
+            />
+          </StImageUpload>
         </BottomPanel>
       </InnerContainer>
     </OuterContainer>

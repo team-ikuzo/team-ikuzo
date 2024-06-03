@@ -8,7 +8,7 @@ export const StPostPreview = styled.div`
   color: white;
   padding: 10px;
   width: 600px;
-  height: 600px;
+  height: auto;
 `;
 
 export const StHashtags = styled.div`
@@ -71,8 +71,6 @@ export const StTitle = styled.div`
   font-size: 20px;
   color: white;
   border-bottom: 2px dashed white;
-  padding: 0 0 25px 0;
-  margin-top: 10px;
 `;
 
 export const StBody = styled.div`
@@ -90,4 +88,11 @@ export const StNotices = styled.div`
   color: white;
   padding: 0 0 25px 0;
   margin-top: 80px;
+`;
+
+export const StImageWrapper = styled.div`
+  img {
+    max-width: 100%;
+    margin-bottom: 15px;
+  }
 `;
