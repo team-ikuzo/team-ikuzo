@@ -1,3 +1,4 @@
+import { supabase } from '@/supabase';
 import { useNavigate } from 'react-router-dom';
 import { StNavBar } from './StyledNavbar';
 

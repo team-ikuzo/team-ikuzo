@@ -20,7 +20,6 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
           <RouterProvider router={router} />
-          <h1>Hello, Team IKUZO!</h1>
         </Provider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

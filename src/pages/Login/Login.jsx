@@ -1,6 +1,7 @@
+import { Page } from '@/components/Page';
 import { supabase } from '@/supabase';
 import { useDispatch } from 'react-redux';
-import { StyledLogin } from './StyledLogin';
+import { StDiv } from './StyledLogin';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -13,10 +14,12 @@ const Login = () => {
     });
   };
   return (
-    <>
-      <StyledLogin>Login Page</StyledLogin>
-      <button onClick={signInWithGithub}>눌러</button>
-    </>
+    <Page>
+      <StDiv>
+        <h1>Login Page</h1>
+        <button onClick={signInWithGithub}>눌러</button>
+      </StDiv>
+    </Page>
   );
 };
 
