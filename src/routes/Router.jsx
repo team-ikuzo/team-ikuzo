@@ -2,11 +2,18 @@ import { Home } from '@/pages/Home';
 import { Login } from '@/pages/Login';
 import { createBrowserRouter } from 'react-router-dom';
 import { Layout } from '../pages/Layout/Layout';
+import { ProtectedRoute } from '../pages/Layout/ProtectedRoute';
+
+// react-router-dom 6v
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: '',
