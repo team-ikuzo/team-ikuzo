@@ -15,8 +15,8 @@ const Card = ({ post }) => {
   return (
     <StCard>
       <StHashtags>
-        {post.hashtags.map((hashtag) => (
-          <p>{hashtag}</p>
+        {post.hashtags.map((hashtag, i) => (
+          <p key={i}>{hashtag}</p>
         ))}
       </StHashtags>
       <StTitle>{post.title}</StTitle>

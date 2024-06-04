@@ -10,7 +10,7 @@ export const StCard = styled.div`
   border-radius: 20px;
 `;
 
-export const StHashtags = styled.p`
+export const StHashtags = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
