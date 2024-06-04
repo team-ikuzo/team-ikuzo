@@ -5,23 +5,14 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import CreatePost from './components/CreatePost/CreatePost';
-import MyPages from './pages/myPage/MyPages';
 import { store } from './redux/store';
 const queryClient = new QueryClient();
 
 const Globalstyle = createGlobalStyle`
   ${reset}
 `;
-function App() {
-  useEffect(() => {
-    const getData = async () => {
-      const data = await supabase.from('page').select('*');
-      console.log(data);
-    };
-    getData();
-  });
 
+function App() {
   return (
     <>
       <Globalstyle />
@@ -30,8 +21,7 @@ function App() {
           <RouterProvider router={router} />
         </Provider>
         <ReactQueryDevtools initialIsOpen={false} />
-        <MyPages />
-        <CreatePost></CreatePost>
+
         <h1>Hello, Team IKUZO!</h1>
       </QueryClientProvider>
     </>
