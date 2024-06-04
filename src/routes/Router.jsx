@@ -8,6 +8,8 @@ import CreatePost from '../components/CreatePost/CreatePost';
 
 // react-router-dom 6v
 
+// react-router-dom 6v
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -34,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/create-post',
     element: <CreatePost />
+  },
+  {
+    path: '/myPages',
+    element: <MyPages />
   }
 ]);
 

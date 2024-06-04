@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import styled from "styled-components";
-=======
 import styled from 'styled-components';
->>>>>>> 25c04c32d56ed1c8de900f21a504ee560e142fe9
 
 export const StCard = styled.div`
   width: 280px;
@@ -14,7 +10,7 @@ export const StCard = styled.div`
   border-radius: 20px;
 `;
 
-export const StHashtags = styled.p`
+export const StHashtags = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -41,16 +37,6 @@ export const StContent = styled.p`
   color: white;
 `;
 
-<<<<<<< HEAD
-export const StHr = styled.hr`
-  width: 100%;
-  height: 2px;
-  background-color: white;
-  border-radius: 2px;
-`;
-
-=======
->>>>>>> 25c04c32d56ed1c8de900f21a504ee560e142fe9
 export const StProfileImage = styled.img``;
 
 export const StProfileDummyImage = styled.div`

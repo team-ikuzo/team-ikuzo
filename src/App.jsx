@@ -1,14 +1,14 @@
 import { router } from '@/routes';
-import { useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import { supabase } from './supabase';
+import CreatePost from './components/CreatePost/CreatePost';
 import MyPages from './pages/myPage/MyPages';
-import { Provider } from "react-redux";
-import store from "./redux/config/configStore";
-import { useState } from "react";
-import CreatePost from "./components/CreatePost/CreatePost";
+import { store } from './redux/store';
+const queryClient = new QueryClient();
 
 const Globalstyle = createGlobalStyle`
   ${reset}
@@ -23,9 +23,18 @@ function App() {
   });
 
   return (
-    <Provider store={store}>
-      <CreatePost></CreatePost>
-    </Provider>
+    <>
+      <Globalstyle />
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <MyPages />
+        <CreatePost></CreatePost>
+        <h1>Hello, Team IKUZO!</h1>
+      </QueryClientProvider>
+    </>
   );
 }
 
