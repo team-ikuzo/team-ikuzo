@@ -5,11 +5,14 @@ import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import { supabase } from './supabase';
 import MyPages from './pages/myPage/MyPages';
+import { Provider } from "react-redux";
+import store from "./redux/config/configStore";
+import { useState } from "react";
+import CreatePost from "./components/CreatePost/CreatePost";
 
 const Globalstyle = createGlobalStyle`
   ${reset}
 `;
-
 function App() {
   useEffect(() => {
     const getData = async () => {
@@ -20,12 +23,9 @@ function App() {
   });
 
   return (
-    <>
-      <Globalstyle />
-      <RouterProvider router={router} />
-      <MyPages />
-      <h1>Hello, Team IKUZO!</h1>
-    </>
+    <Provider store={store}>
+      <CreatePost></CreatePost>
+    </Provider>
   );
 }
 
