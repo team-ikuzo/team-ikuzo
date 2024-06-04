@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StContainer,
   StMain,
@@ -9,15 +9,33 @@ import {
   StProfileTitle,
   StProfileLink,
   StIntroduction,
+  StIntroductionTitle,
   StTag,
-  StProfileTemperature,
+  StProfileButton,
+  StSectionDevider,
   StTabs,
   StTabButton,
   StPosts
 } from './StyledMyPage';
 import { Card } from '../../components/Card';
+import { supabase } from '../../supabase';
 
 function MyPage() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const FetchData = async () => {
+      const { data, error } = await supabase.from('users').select('*');
+      if (error) {
+        console.log('error =>', error);
+      } else {
+        console.log('data=>', data);
+        setUsers(data);
+      }
+    };
+    FetchData();
+  }, []);
+
   return (
     <StContainer>
       <StMain>
@@ -31,13 +49,11 @@ function MyPage() {
               <StProfileLink href="http://www.velog.com">www.velog.com</StProfileLink>
             </StProfileInfo>
 
-            <StProfileTemperature>
-              <button>프로필 편집</button>
-            </StProfileTemperature>
+            <StProfileButton>프로필 편집</StProfileButton>
           </StProfileHeader>
 
           <StIntroduction>
-            <h3>소개글</h3>
+            <StIntroductionTitle>소개글</StIntroductionTitle>
             Lorem ipsum dolor sit amet consectetur. Ullamcorper mollis faucibus aenean sit cras. Egestas
           </StIntroduction>
 
@@ -48,6 +64,7 @@ function MyPage() {
 
           <StTabs>
             <StTabButton>최신순</StTabButton>
+            <StSectionDevider>|</StSectionDevider>
             <StTabButton>좋아요순</StTabButton>
           </StTabs>
 
