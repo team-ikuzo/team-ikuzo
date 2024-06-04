@@ -1,9 +1,19 @@
 import styled from 'styled-components';
 
-const StyledHome = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+export const StBackground = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  background-color: #1d1f21;
 `;
 
-export { StyledHome };
+export const StDiv = styled.div`
+  margin-top: 50px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+`;

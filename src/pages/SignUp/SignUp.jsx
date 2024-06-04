@@ -2,7 +2,7 @@ import { Input } from '@/components/LoginInput';
 import { Page } from '@/components/Page';
 import { supabase } from '@/supabase';
 import { useState } from 'react';
-import { StForm } from './StyledSignUp';
+import { StBackground, StButtons, StDiv, StForm, StInput, StTitle } from './StyledSignUp';
 
 export const SignUp = () => {
   const [inputs, setInputs] = useState({
@@ -26,18 +26,37 @@ export const SignUp = () => {
   };
   return (
     <Page>
-      <StForm onSubmit={onSubmit}>
-        <Input name={'email'} label={'이메일'} onChange={onChange} type={'email'} value={inputs.email} />
-        <Input name={'password'} label={'비밀번호'} onChange={onChange} type={'password'} value={inputs.password} />
-        <Input
-          name={'passwordConfirm'}
-          label={'비밀번호 확인'}
-          onChange={onChange}
-          type={'password'}
-          value={inputs.passwordConfirm}
-        />
-        <button>회원가입</button>
-      </StForm>
+      <StBackground>
+        <StDiv>
+          <StTitle>SIGN UP</StTitle>
+          <StForm onSubmit={onSubmit}>
+            <StInput>
+              <Input name={'email'} label={'이메일'} onChange={onChange} type={'email'} value={inputs.email} />
+            </StInput>
+            <StInput>
+              <Input
+                name={'password'}
+                label={'비밀번호'}
+                onChange={onChange}
+                type={'password'}
+                value={inputs.password}
+              />
+            </StInput>
+            <StInput>
+              <Input
+                name={'passwordConfirm'}
+                label={'비밀번호 확인'}
+                onChange={onChange}
+                type={'password'}
+                value={inputs.passwordConfirm}
+              />
+            </StInput>
+            <StButtons>
+              <button>회원가입</button>
+            </StButtons>
+          </StForm>
+        </StDiv>
+      </StBackground>
     </Page>
   );
 };
