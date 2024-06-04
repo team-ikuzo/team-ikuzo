@@ -5,6 +5,7 @@ import { StyledHome } from './StyledHome';
 const Home = () => {
   return (
     <div>
+      <h1>변경사항</h1>
       <StyledHome>Hello My Team!</StyledHome>
 
       {dummy.map((post, i) => (
