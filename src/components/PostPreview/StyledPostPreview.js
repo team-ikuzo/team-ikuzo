@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const StPostPreview = styled.div`
   background-color: #4c4c4c;
-  padding: 20px;
   padding-bottom: 50px;
   border-radius: 20px;
   color: white;
@@ -17,8 +16,8 @@ export const StHashtags = styled.div`
   gap: 10px;
   color: #4c4c4c;
   border-bottom: 2px dashed white;
-  padding: 0 0 25px 0;
-  margin-top: 10px;
+  padding: 0 0 15px 0;
+  margin-top: 0px;
 `;
 
 export const StHashtag = styled.p`
@@ -69,6 +68,7 @@ export const StHashtag = styled.p`
 export const StTitle = styled.div`
   font-weight: bold;
   font-size: 20px;
+  height: 60px;
   color: white;
   border-bottom: 2px dashed white;
 `;

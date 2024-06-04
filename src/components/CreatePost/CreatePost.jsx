@@ -31,7 +31,26 @@ const CreatePost = () => {
   const likes = useSelector((state) => state.postSlice.likesCount);
   const commentsCount = useSelector((state) => state.postSlice.commentsCount);
   const notices = useSelector((state) => state.postSlice.notices);
-  const image = useSelector((state) => state.postSlice.image);
+  const imageUrl = useSelector((state) => state.postSlice.image);
+
+
+  // supabase전에 localStorage를 이용해서 데이터 저장(추후 저장방식변경예정)
+
+    const handleSave = () => {
+      const postData = {
+        title,
+        body,
+        name,
+        job,
+        hashtags,
+        likes,
+        commentsCount,
+        notices,
+        imageUrl,
+      };
+      localStorage.setItem('post', JSON.stringify(postData));
+    };
+
   return (
     <OuterContainer>
       <InnerContainer>
@@ -80,6 +99,8 @@ const CreatePost = () => {
               onChange={(e) => dispatch(setNotices(e.target.value))}
             />
           </StNotices>
+
+          <button onClick={handleSave}>작성</button>
         </RightPanel>
 
         <LeftPanel>

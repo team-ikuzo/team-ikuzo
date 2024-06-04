@@ -13,6 +13,7 @@ import {
   setHashtags,
   setHashtagsDelete,
 } from "../../redux/slices/createPostSlice";
+import { Card } from "../Card/Card";
 
 const PostPreview = () => {
   const dispatch = useDispatch();
@@ -72,7 +73,9 @@ const PostPreview = () => {
       </StBody>
 
       <StNotices>{notices}</StNotices>
+      
     </StPostPreview>
+    
   );
 };
 
