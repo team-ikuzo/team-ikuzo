@@ -36,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/create-post',
     element: <CreatePost />
+  },
+  {
+    path: '/myPages',
+    element: <MyPages />
   }
 ]);
 
