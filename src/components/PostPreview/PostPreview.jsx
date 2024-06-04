@@ -1,19 +1,8 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  StPostPreview,
-  StHashtags,
-  StHashtag,
-  StTitle,
-  StBody,
-  StNotices,
-  StImageWrapper,
-} from "./StyledPostPreview";
-import {
-  setHashtags,
-  setHashtagsDelete,
-} from "../../redux/slices/createPostSlice";
-import { Card } from "../Card/Card";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { StPostPreview, StHashtags, StHashtag, StTitle, StBody, StNotices, StImageWrapper } from './StyledPostPreview';
+import { setHashtags, setHashtagsDelete } from '../../redux/createPostSlice';
+import { Card } from '../Card/Card';
 
 const PostPreview = () => {
   const dispatch = useDispatch();
@@ -28,9 +17,9 @@ const PostPreview = () => {
   const imageUrl = useSelector((state) => state.postSlice.image);
 
   const StButton = {
-    border: "none",
-    backgroundColor: "transparent",
-    pointer: "cursor",
+    border: 'none',
+    backgroundColor: 'transparent',
+    pointer: 'cursor'
   };
 
   return (
@@ -46,10 +35,7 @@ const PostPreview = () => {
             <div key={index}>
               <StHashtag hashtag={hashtag}>
                 {hashtag}
-                <button
-                  style={StButton}
-                  onClick={() => dispatch(setHashtagsDelete(hashtag))}
-                >
+                <button style={StButton} onClick={() => dispatch(setHashtagsDelete(hashtag))}>
                   x
                 </button>
               </StHashtag>
@@ -59,7 +45,7 @@ const PostPreview = () => {
       </div>
 
       <StBody>
-        {body.split("\n").map((line,index) => {
+        {body.split('\n').map((line, index) => {
           return (
             <span key={index}>
               {line}
@@ -67,15 +53,11 @@ const PostPreview = () => {
             </span>
           );
         })}
-        <StImageWrapper>
-          {imageUrl && <img src={imageUrl} alt="Uploaded" />}
-        </StImageWrapper>
+        <StImageWrapper>{imageUrl && <img src={imageUrl} alt="Uploaded" />}</StImageWrapper>
       </StBody>
 
       <StNotices>{notices}</StNotices>
-      
     </StPostPreview>
-    
   );
 };
 

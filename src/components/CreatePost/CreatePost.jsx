@@ -1,13 +1,7 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setBody,
-  setHashtags,
-  setImage,
-  setNotices,
-  setTitle,
-} from "../../redux/slices/createPostSlice";
-import PostPreview from "../PostPreview/PostPreview";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setBody, setHashtags, setImage, setNotices, setTitle } from '../../redux/createPostSlice';
+import PostPreview from '../PostPreview/PostPreview';
 import {
   OuterContainer,
   InnerContainer,
@@ -19,7 +13,9 @@ import {
   StSelect,
   StTitle,
   StImageUpload,
-} from "./StyledCreatePost";
+  StButton
+} from './StyledCreatePost';
+import { supabase } from '../../supabase';
 
 const CreatePost = () => {
   const dispatch = useDispatch();
@@ -29,27 +25,19 @@ const CreatePost = () => {
   const job = useSelector((state) => state.postSlice.job);
   const hashtags = useSelector((state) => state.postSlice.hashtags);
   const likes = useSelector((state) => state.postSlice.likesCount);
-  const commentsCount = useSelector((state) => state.postSlice.commentsCount);
   const notices = useSelector((state) => state.postSlice.notices);
   const imageUrl = useSelector((state) => state.postSlice.image);
 
+  // supabase에 보낼데이터 title, body, hashtags, notices, imageUrl -> 5개
+  const handleSave = async () => {
+    const { data, error } = await supabase.from('posts').insert({ title, body, hashtags, notices, imageUrl });
 
-  // supabase전에 localStorage를 이용해서 데이터 저장(추후 저장방식변경예정)
-
-    const handleSave = () => {
-      const postData = {
-        title,
-        body,
-        name,
-        job,
-        hashtags,
-        likes,
-        commentsCount,
-        notices,
-        imageUrl,
-      };
-      localStorage.setItem('post', JSON.stringify(postData));
-    };
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Supabase client is not properly configured or user is not authenticated');
+    }
+  };
 
   return (
     <OuterContainer>
@@ -68,10 +56,7 @@ const CreatePost = () => {
           <StSelect>
             [요구스택]
             <br />
-            <select
-              name="hashtag"
-              onChange={(e) => dispatch(setHashtags(e.target.value))}
-            >
+            <select name="hashtag" onChange={(e) => dispatch(setHashtags(e.target.value))}>
               <option value="Front-end">Front-end</option>
               <option value="Back-end">Back-end</option>
               <option value="Python">Python</option>
@@ -100,7 +85,7 @@ const CreatePost = () => {
             />
           </StNotices>
 
-          <button onClick={handleSave}>작성</button>
+          <StButton onClick={handleSave}>작성</StButton>
         </RightPanel>
 
         <LeftPanel>
@@ -122,9 +107,7 @@ const CreatePost = () => {
               type="file"
               id="imageUpload"
               name="imageUpload"
-              onChange={(e) =>
-                dispatch(setImage(URL.createObjectURL(e.target.files[0])))
-              }
+              onChange={(e) => dispatch(setImage(URL.createObjectURL(e.target.files[0])))}
             />
           </StImageUpload>
         </BottomPanel>

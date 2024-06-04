@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const OuterContainer = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ export const InnerContainer = styled.div`
   height: auto;
   background-color: #4c4c4c;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 1);
 
   border-radius: 30px;
 `;
@@ -34,8 +34,9 @@ export const LeftPanel = styled.div`
   justify-content: center;
   align-items: center;
   height: auto;
+  min-height: 400px;
   width: 650px;
-  border: 1px solid white;
+  border: 2px solid #121212;
   border-radius: 20px;
 `;
 
@@ -61,7 +62,6 @@ export const StTitle = styled.div`
 
 export const StSelect = styled.div`
   margin-bottom: 20px;
-
   select {
     height: 32px;
     border: 2px solid black;
@@ -110,12 +110,31 @@ export const StImageUpload = styled.div`
     margin-bottom: 10px;
   }
 
-  input[type="file"] {
+  input[type='file'] {
     width: 100%;
     color: white;
     background-color: #333;
     padding: 10px;
     border: 1px solid #555;
     border-radius: 5px;
+  }
+`;
+
+export const StButton = styled.button`
+  background-color: rgb(233, 233, 233);
+  border: 2px solid black;
+  color: black;
+  padding: 8px 20px;
+  text-align: center;
+  text-decoration: none;
+
+  font-size: 16px;
+  margin: 2px 2px;
+  cursor: pointer;
+  border-radius: 20px;
+
+  &:hover {
+    color: white;
+    background-color: gray;
   }
 `;
