@@ -72,6 +72,7 @@ const PostTitle = styled.h1`
 const SectionTitle = styled.h2`
   font-size: 22px;
   margin-bottom: 10px;
+  font-weight: bold;
 `;
 
 const PostingSection = styled.div`
@@ -122,7 +123,7 @@ const Post = () => {
           <UserJob>{post.job}</UserJob>
         </UserInf>
         <LikesSection>
-          <LikeButton>❤️</LikeButton>
+          <LikeButton>🤍</LikeButton>
           <div>126</div>
         </LikesSection>
       </TopSection>
