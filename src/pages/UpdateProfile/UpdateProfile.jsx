@@ -81,19 +81,21 @@ function UpdateProfile() {
             <StProfilePhoto />
 
             <StProfileInfo>
-              <StProfileTitle>James</StProfileTitle>
-              <StProfileLink href="http://www.github.com">www.github.com</StProfileLink>
-              <StProfileLink href="http://www.velog.com">www.velog.com</StProfileLink>
+              <StProfileTitle>
+                <input type='text'>원래 이름 불러오기</input>
+              </StProfileTitle>
+              <StProfileLink href="http://www.github.com"><input type='text'>원래 주소 불러오기</input></StProfileLink>
+              <StProfileLink href="http://www.velog.com"><input type='text'>원래 주소 불러오기</input></StProfileLink>
             </StProfileInfo>
 
             <StProfileTemperature>
-              <button>프로필 편집</button>
+              <button>편집 종료</button>
             </StProfileTemperature>
           </StProfileHeader>
 
           <StIntroduction>
             <h3>소개글</h3>
-            Lorem ipsum dolor sit amet consectetur. Ullamcorper mollis faucibus aenean sit cras. Egestas
+            <input type='text'>원래 소개글 불러오기</input>
           </StIntroduction>
 
           <div className="tags">
