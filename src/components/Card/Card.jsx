@@ -4,16 +4,6 @@ import {
   StCount,
   StCountBox,
   StHashtags,
-<<<<<<< HEAD
-  StHr,
-  StInfo,
-  StNameCard,
-  StProfileDummyImage,
-  StTitle,
-} from "./StyledCard";
-
-const Card = ({ post }) => {
-=======
   StInfo,
   StNameCard,
   StProfileDummyImage,
@@ -31,7 +21,6 @@ const Card = () => {
     commentsCount: 12
   };
 
->>>>>>> 25c04c32d56ed1c8de900f21a504ee560e142fe9
   return (
     <StCard>
       <StHashtags>
@@ -41,10 +30,6 @@ const Card = () => {
       </StHashtags>
       <StTitle>{post.title}</StTitle>
       <StContent>{post.body}</StContent>
-<<<<<<< HEAD
-      <StHr />
-=======
->>>>>>> 25c04c32d56ed1c8de900f21a504ee560e142fe9
       <StNameCard>
         <StProfileDummyImage />
         <StInfo>
