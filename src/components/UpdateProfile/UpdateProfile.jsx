@@ -47,29 +47,29 @@ const UpdateProfile = () => {
             alert("닉네임을 입력하세요");
             return; // 아무것도 입력하지 않았을 때 dispatch 하지 않음
         }
-        // dispatch(
-        //     updateTitle({ title })
-        // );
-        // dispatch(
-        //     updateIntroduction({ introduction })
-        // );
-        // dispatch(
-        //     updateTags({ tags })
-        // );
+        dispatch(
+            updateTitle({ title })
+        );
+        dispatch(
+            updateIntroduction({ introduction })
+        );
+        dispatch(
+            updateTags({ tags })
+        );
 
-        // const { error } = await supabase
-        //     .from('users')
-        //     .update({
-        //         display_name: title,
-        //         introduction: introduction,
-        //         hashtags: tags,
-        //         profile_image_path: image
-        //     })
-        //     .eq('user_id', id)
-        // if (error) {
-        //     throw Error(error.message);
-        // }
-        // navigate(`/myPages`);
+        const { error } = await supabase
+            .from('users')
+            .update({
+                display_name: title,
+                introduction: introduction,
+                hashtags: tags,
+                profile_image_path: image
+            })
+            .eq('user_id', id)
+        if (error) {
+            throw Error(error.message);
+        }
+        navigate(`/myPages`);
     };
 
     const updateImg = () => {
