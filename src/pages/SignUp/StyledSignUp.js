@@ -39,7 +39,7 @@ export const StDiv = styled.div`
 
 export const StButtons = styled.div`
   width: 100%;
-  margin-top: 30px;
+  margin-top: 60px;
 
   & button {
     display: flex;
@@ -60,21 +60,10 @@ export const StButtons = styled.div`
   & button:hover {
     background-color: #6c6c6c;
   }
-
-  & button.save {
-    color: #4c4c4c;
-    background-color: white;
-    font-weight: 700;
-    border: none;
-  }
-
-  & button.save:hover {
-    background-color: #d9d9d9;
-  }
 `;
 
 export const StTitle = styled.h2`
-  margin: 0 0 32px 0;
+  margin: 0 0 90px 0;
   font-size: 48px;
   font-weight: 900;
   color: white;
