@@ -1,13 +1,13 @@
-const { createSlice } = require("@reduxjs/toolkit")
+
+import { supabase } from '@/supabase';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 
 //초기 상태값
 const initialState = {
-    id: 1,
-    title: "",
-    links: [],
-    introduction: "",
-    tags: [],
+    title: "테스트",
+    introduction: "테스트",
+    tags: ["테스트"],
 }
 
 const updateProfileSlice = createSlice({
@@ -16,9 +16,6 @@ const updateProfileSlice = createSlice({
     reducers: {
         updateTitle: (state, action) => {
             state.title = action.payload
-        },
-        updateLinks: (state, action) => {
-            state.links = [...action.payload]
         },
         updateIntroduction: (state, action) => {
             state.introduction = action.payload
@@ -29,5 +26,5 @@ const updateProfileSlice = createSlice({
     }
 })
 
-export const {updateIntroduction, updateLinks, updateTags, updateTitle} = updateProfileSlice.actions;
+export const {updateIntroduction, updateTags, updateTitle} = updateProfileSlice.actions;
 export default updateProfileSlice.reducer;
