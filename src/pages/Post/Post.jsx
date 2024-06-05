@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPost, toggleLike, submitApplication } from '../../redux/slices/postSlice';
+import { fetchPost, toggleLike } from '../../redux/slices/postSlice';
 import styled from 'styled-components';
 import { supabase } from '@/supabase';
 import Modal from './Modal'; // Modal 컴포넌트 임포트
@@ -63,6 +63,10 @@ const LikeButton = styled.button`
 
   &:hover {
     transform: scale(1.2);
+  }
+
+  &.liked {
+    color: red;
   }
 `;
 
@@ -210,8 +214,10 @@ const Post = () => {
           <UserJob>{post.job}</UserJob>
         </UserInf>
         <LikesSection>
-          <LikeButton onClick={handleLikeClick}>{isLiked ? '🤍' : '🖤'}</LikeButton>
-          <div>{likes.filter((like) => like.post_id === id).length}</div>
+          <LikeButton onClick={handleLikeClick} className={isLiked ? 'liked' : ''}>
+            {isLiked ? '❤️' : '🤍'}
+          </LikeButton>
+          <div>{post.likes_count}</div>
         </LikesSection>
       </TopSection>
       <PostTitle>{post.title}</PostTitle>
