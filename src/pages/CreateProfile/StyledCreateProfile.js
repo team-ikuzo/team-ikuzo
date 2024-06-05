@@ -30,15 +30,16 @@ export const StDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 680px;
-  padding: 90px 170px 120px 170px;
+  width: 600px;
+  height: 700px;
+  padding: 70px 130px 80px 130px;
   background-color: #4c4c4c;
   border-radius: 20px;
 `;
 
 export const StButtons = styled.div`
   width: 100%;
-  margin-top: 60px;
+  margin-top: 30px;
 
   & button {
     display: flex;
@@ -73,7 +74,7 @@ export const StButtons = styled.div`
 `;
 
 export const StTitle = styled.h2`
-  margin: 0 0 90px 0;
+  margin: 0 0 32px 0;
   font-size: 48px;
   font-weight: 900;
   color: white;
