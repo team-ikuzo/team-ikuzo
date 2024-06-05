@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '@/supabase';
 
+// 게시글 가져오기
 export const fetchPost = createAsyncThunk('post/fetchPost', async (id) => {
   const { data: post, error: postError } = await supabase
     .from('posts')
@@ -24,6 +25,7 @@ export const fetchPost = createAsyncThunk('post/fetchPost', async (id) => {
   return { post, likes };
 });
 
+// 좋아요 토글
 export const toggleLike = createAsyncThunk('post/toggleLike', async ({ postId, userId }) => {
   const { data: existingLike, error: likeError } = await supabase
     .from('likes')
@@ -65,6 +67,7 @@ export const toggleLike = createAsyncThunk('post/toggleLike', async ({ postId, u
   return { postId, userId, newLikesCount };
 });
 
+// 좋아요 수 업데이트
 const updateLikesCount = async (postId, increment) => {
   const { data: post, error: fetchError } = await supabase
     .from('posts')
@@ -89,6 +92,20 @@ const updateLikesCount = async (postId, increment) => {
 
   return newLikesCount;
 };
+
+// 지원하기
+export const submitApplication = createAsyncThunk('post/submitApplication', async ({ userId, postId, hashtags, body }) => {
+  const { data, error } = await supabase
+    .from('assignments')
+    .insert({ user_id: userId, post_id: postId, hashtags, body })
+    .single();
+
+  if (error) {
+    throw Error(error.message);
+  }
+
+  return data;
+});
 
 const postSlice = createSlice({
   name: 'post',
@@ -123,6 +140,16 @@ const postSlice = createSlice({
         } else {
           state.likes.push({ post_id: postId, user_id: userId });
         }
+      })
+      .addCase(submitApplication.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(submitApplication.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(submitApplication.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

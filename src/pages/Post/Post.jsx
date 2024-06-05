@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPost, toggleLike } from '../../redux/slices/postSlice';
+import { fetchPost, toggleLike, submitApplication } from '../../redux/slices/postSlice';
 import styled from 'styled-components';
 import { supabase } from '@/supabase';
 import Modal from './Modal'; // Modal 컴포넌트 임포트
@@ -131,7 +131,6 @@ const Post = () => {
   const [userId, setUserId] = useState(null); // 현재 사용자 ID
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [application, setApplication] = useState({
-    name: '',
     part: '',
     content: ''
   });
@@ -179,13 +178,13 @@ const Post = () => {
   const handleSubmitApplication = async () => {
     if (userId) {
       try {
-        const { payload } = await dispatch(submitApplication({
+        await dispatch(submitApplication({
           userId,
           postId: id,
           hashtags: [application.part], // 배열로 변환
           body: application.content
         })).unwrap();
-        console.log('Application submitted successfully:', payload);
+        console.log('Application submitted successfully');
         setIsModalOpen(false);
       } catch (error) {
         console.error('Application submission error:', error);
@@ -240,14 +239,6 @@ const Post = () => {
       </MediaPart>
       <ApplyButton onClick={handleApplyClick}>지원하기</ApplyButton>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <input
-          type="text"
-          placeholder="이름을 입력하세요"
-          name="name"
-          value={application.name}
-          onChange={handleInputChange}
-        />
-        <br />
         <input
           type="text"
           placeholder="지원 파트를 입력하세요"
