@@ -30,7 +30,9 @@ const CreatePost = () => {
 
   // supabase에 보낼데이터 title, body, hashtags, notices, imageUrl -> 5개
   const handleSave = async () => {
-    const { data, error } = await supabase.from('posts').insert({ title, body, hashtags, notices, imageUrl });
+    const { data, error } = await supabase
+      .from('posts')
+      .insert({ title, body, hashtags, notice: { notices }, imageUrl: { post_image_url } });
 
     if (error) {
       console.log(error);
@@ -45,6 +47,7 @@ const CreatePost = () => {
         <RightPanel>
           <StTitle>
             [제목]
+            <br />
             <input
               type="text"
               value={title}
@@ -52,6 +55,17 @@ const CreatePost = () => {
               onChange={(e) => dispatch(setTitle(e.target.value))}
             />
           </StTitle>
+
+          <StNotices>
+            [공지사항]
+            <br />
+            <input
+              type="text"
+              placeholder="공지사항 입력란"
+              value={notices}
+              onChange={(e) => dispatch(setNotices(e.target.value))}
+            />
+          </StNotices>
 
           <StSelect>
             [요구스택]
@@ -74,16 +88,6 @@ const CreatePost = () => {
               <option value="C">C</option>
             </select>
           </StSelect>
-
-          <StNotices>
-            [공지사항]
-            <input
-              type="text"
-              placeholder="공지사항 입력란"
-              value={notices}
-              onChange={(e) => dispatch(setNotices(e.target.value))}
-            />
-          </StNotices>
 
           <StButton onClick={handleSave}>작성</StButton>
         </RightPanel>

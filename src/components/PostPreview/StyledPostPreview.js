@@ -1,14 +1,17 @@
 import styled from 'styled-components';
 
 export const StPostPreview = styled.div`
-  background-color: #4c4c4c;
-  padding-bottom: 10px;
+  background-color: #3c3c3c;
   border-radius: 20px;
   color: white;
-  padding: 10px;
+  padding: 30px;
   width: 600px;
   height: auto;
-  min-height: 350px;
+  min-height: 550px;
+  transition: background-color 0.5s ease;
+  &:hover {
+    background-color: #2c2c2c;
+  }
 `;
 
 export const StHashtags = styled.div`
@@ -28,6 +31,13 @@ export const StHashtag = styled.p`
   height: 24px;
   font-weight: bold;
   padding: 6px 10px;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+  &:hover {
+    transform: scale(1.05);
+    background-color: #dcdcdc;
+  }
   background-color: ${(props) => {
     switch (props.hashtag) {
       case 'Front-end':
@@ -83,8 +93,9 @@ export const StBody = styled.div`
   border-bottom: 2px solid gray;
   padding: 0 0 25px 0;
   height: auto;
-  min-height: 132px;
+  min-height: 320px;
   margin-top: 10px;
+  line-height: 1.4;
 `;
 
 export const StNotices = styled.div`
@@ -100,5 +111,6 @@ export const StImageWrapper = styled.div`
   img {
     max-width: 100%;
     margin-bottom: 15px;
+    border-radius: 10px;
   }
 `;
