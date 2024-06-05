@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPost } from '../../redux/slices/postSlice';
+import { fetchPost, toggleLike } from '../../redux/slices/postSlice';
 import styled from 'styled-components';
+import { supabase } from '@/supabase';
 
 // 스타일드 컴포넌트
 const PostContainer = styled.div`
-  max-width: 60%;
+  max-width: 50%;
+  height: auto;
   padding: 30px;
-  margin: 0 auto;
+  margin: 30px auto;
   border: 1px solid #ddd;
   border-radius: 15px;
   background-color: #4c4c4c;
@@ -57,7 +59,7 @@ const LikeButton = styled.button`
   font-size: 24px;
   cursor: pointer;
   transition: transform 0.2s;
-  
+
   &:hover {
     transform: scale(1.2);
   }
@@ -97,16 +99,45 @@ const HashTags = styled.div`
   font-weight: bold;
 `;
 
+const MediaPart = styled.div`
+  max-width: 300px;
+  max-height: 250px;
+`;
+
 const Post = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { post, loading, error } = useSelector((state) => state.post);
+  const { post, loading, error, likes } = useSelector((state) => state.post);
+  const [userId, setUserId] = useState(null); // 현재 사용자 ID
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      } else {
+        console.error('No user found');
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     dispatch(fetchPost(id));
   }, [dispatch, id]);
 
-  if (loading) return <div>로딩 중...</div>;
+  const handleLikeClick = () => {
+    if (userId) {
+      dispatch(toggleLike({ postId: id, userId }));
+    } else {
+      console.error('User ID is null');
+    }
+  };
+
+  const isLiked = likes.some((like) => like.post_id === id && like.user_id === userId);
+
+  if (loading) return <div>NOW LOADING....</div>;
   if (error) return <div>게시글을 찾을 수 없습니다.</div>;
   if (!post) return <div>게시글이 존재하지 않습니다.</div>;
 
@@ -123,8 +154,10 @@ const Post = () => {
           <UserJob>{post.job}</UserJob>
         </UserInf>
         <LikesSection>
-          <LikeButton>🤍</LikeButton>
-          <div>126</div>
+          <LikeButton onClick={handleLikeClick}>
+            {isLiked ? '🤍' : '🖤'}
+          </LikeButton>
+          <div>{likes.filter((like) => like.post_id === id).length}</div>
         </LikesSection>
       </TopSection>
       <PostTitle>{post.title}</PostTitle>
@@ -132,12 +165,19 @@ const Post = () => {
       <PostingSection>{post.body}</PostingSection>
       <SectionTitle>모집 분야</SectionTitle>
       <HashContainer>
-        {post.hashtags && post.hashtags.map((tag, index) => (
-          <HashTags key={index}>{tag}</HashTags>
-        ))}
+        {post.hashtags && post.hashtags.map((tag, index) => <HashTags key={index}>{tag}</HashTags>)}
       </HashContainer>
       <SectionTitle>미디어</SectionTitle>
-      {/* 미디어 섹션 내용 추가 */}
+      <MediaPart>
+        <img
+          style={{
+            objectFit: 'contain',
+            maxWidth: '400px',
+          }}
+          src="https://previews.123rf.com/images/toozdesign/toozdesign1710/toozdesign171000021/87433912-%EB%9D%BC%EC%9D%B8-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8.jpg"
+          alt=""
+        />
+      </MediaPart>
     </PostContainer>
   );
 };
