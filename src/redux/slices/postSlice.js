@@ -2,20 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '@/supabase';
 
 export const fetchPost = createAsyncThunk('post/fetchPost', async (id) => {
-  const { data: post, error: postError } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('id', id)
-    .single();
-  
+  const { data: post, error: postError } = await supabase.from('posts').select('*').eq('id', id).single();
+
   if (postError) {
     throw Error(postError.message);
   }
 
-  const { data: likes, error: likesError } = await supabase
-    .from('likes')
-    .select('*')
-    .eq('post_id', id);
+  const { data: likes, error: likesError } = await supabase.from('likes').select('*').eq('post_id', id);
 
   if (likesError) {
     throw Error(likesError.message);
@@ -37,11 +30,7 @@ export const toggleLike = createAsyncThunk('post/toggleLike', async ({ postId, u
   }
 
   if (existingLike) {
-    const { data, error } = await supabase
-      .from('likes')
-      .delete()
-      .eq('id', existingLike.id)
-      .select();
+    const { data, error } = await supabase.from('likes').delete().eq('id', existingLike.id).select();
 
     if (error) {
       throw Error(error.message);
@@ -49,11 +38,7 @@ export const toggleLike = createAsyncThunk('post/toggleLike', async ({ postId, u
 
     return { postId, userId, liked: false };
   } else {
-    const { data, error } = await supabase
-      .from('likes')
-      .insert({ post_id: postId, user_id: userId })
-      .select()
-      .single();
+    const { data, error } = await supabase.from('likes').insert({ post_id: postId, user_id: userId }).select().single();
 
     if (error) {
       throw Error(error.message);
@@ -63,13 +48,36 @@ export const toggleLike = createAsyncThunk('post/toggleLike', async ({ postId, u
   }
 });
 
+export const submitApplication = createAsyncThunk(
+  'post/submitApplication',
+  async ({ userId, postId, hashtags, body }) => {
+    try {
+      const { data, error } = await supabase
+        .from('assignments')
+        .insert({ post_id: postId, hashtags, body })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error inserting application:', error);
+        throw Error(error.message);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Catch block error:', error);
+      throw error;
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: 'post',
   initialState: {
     post: null,
     loading: false,
     error: null,
-    likes: [],
+    likes: []
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -94,8 +102,18 @@ const postSlice = createSlice({
         } else {
           state.likes = state.likes.filter((like) => like.post_id !== postId || like.user_id !== userId);
         }
+      })
+      .addCase(submitApplication.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(submitApplication.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(submitApplication.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
-  },
+  }
 });
 
 export default postSlice.reducer;
