@@ -5,6 +5,7 @@ import { ProtectedRoute } from '@/pages/Layout/ProtectedRoute';
 import { Login } from '@/pages/Login';
 import { createBrowserRouter } from 'react-router-dom';
 import CreatePost from '../components/CreatePost/CreatePost';
+import { UpdateProfile } from '@/pages/UpdateProfile/UpdateProfile';
 
 // react-router-dom 6v
 
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: '/myPages',
     element: <MyPages />
+  },
+  {
+    path: '/updateProfile',
+    element: <UpdateProfile />
   }
 ]);
 
