@@ -8,6 +8,7 @@ export const StCard = styled.div`
   flex-direction: column;
   gap: 20px;
   border-radius: 20px;
+  border-color: white;
 `;
 
 export const StHashtags = styled.div`
