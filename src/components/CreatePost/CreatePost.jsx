@@ -1,43 +1,64 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBody, setHashtags, setImage, setNotices, setTitle } from '../../redux/createPostSlice';
+import {
+  setBody,
+  setHashtags,
+  addImage,
+  removeImage,
+  setNotices,
+  setTitle,
+  addlocalimages,
+  removelocalimages
+} from '../../redux/createPostSlice';
 import PostPreview from '../PostPreview/PostPreview';
 import {
   OuterContainer,
   InnerContainer,
   LeftPanel,
   RightPanel,
-  BottomPanel,
   StBody,
   StNotices,
   StSelect,
   StTitle,
   StImageUpload,
-  StButton
+  StButton,
+  StImageDeleteBtn
 } from './StyledCreatePost';
 import { supabase } from '../../supabase';
 
 const CreatePost = () => {
   const dispatch = useDispatch();
+
   const title = useSelector((state) => state.postSlice.title);
   const body = useSelector((state) => state.postSlice.body);
-  const name = useSelector((state) => state.postSlice.name);
-  const job = useSelector((state) => state.postSlice.job);
   const hashtags = useSelector((state) => state.postSlice.hashtags);
-  const likes = useSelector((state) => state.postSlice.likesCount);
   const notices = useSelector((state) => state.postSlice.notices);
-  const imageUrl = useSelector((state) => state.postSlice.image);
+  const images = useSelector((state) => state.postSlice.images);
+  const localimages = useSelector((state) => state.postSlice.localimages);
 
-  // supabase에 보낼데이터 title, body, hashtags, notices, imageUrl -> 5개
-  const handleSave = async () => {
-    const { data, error } = await supabase
-      .from('posts')
-      .insert({ title, body, hashtags, notice: { notices }, imageUrl: { post_image_url } });
+  // const handleImageChange = (e) => {
+  //   dispatch(addlocalimages(URL.createObjectURL(e.target.files[0])));
+  //   dispatch(addImage(e.target.files[0]));
+  // };
 
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Supabase client is not properly configured or user is not authenticated');
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const imageUrl = URL.createObjectURL(file);
+    dispatch(addlocalimages(imageUrl));
+    dispatch(addImage(imageUrl));
+  };
+
+  const handleRemoveImage = () => {
+    dispatch(removeImage());
+    dispatch(removelocalimages());
+  };
+
+  const handleSave = async (e) => {
+    console.log(e.target.files[0]);
+    console.log(images);
+
+    const { data, error } = await supabase.storage.from('post_image_storage').upload('public/postContent.png', images);
+    {
     }
   };
 
@@ -67,6 +88,16 @@ const CreatePost = () => {
             />
           </StNotices>
 
+          <StBody>
+            [내용]
+            <br />
+            <textarea
+              type="text"
+              placeholder="내용을 입력해주세요"
+              value={body}
+              onChange={(e) => dispatch(setBody(e.target.value))}
+            />
+          </StBody>
           <StSelect>
             [요구스택]
             <br />
@@ -88,6 +119,12 @@ const CreatePost = () => {
               <option value="C">C</option>
             </select>
           </StSelect>
+          <StImageUpload>
+            <label htmlFor="imageUpload">이미지 첨부</label>
+            <input type="file" multiple id="imageUpload" name="imageUpload" onChange={handleImageChange} />
+
+            <StImageDeleteBtn onClick={handleRemoveImage}>이미지 삭제</StImageDeleteBtn>
+          </StImageUpload>
 
           <StButton onClick={handleSave}>작성</StButton>
         </RightPanel>
@@ -95,26 +132,6 @@ const CreatePost = () => {
         <LeftPanel>
           <PostPreview />
         </LeftPanel>
-
-        <BottomPanel>
-          <StBody>
-            <textarea
-              type="text"
-              placeholder="내용을 입력해주세요"
-              value={body}
-              onChange={(e) => dispatch(setBody(e.target.value))}
-            />
-          </StBody>
-          <StImageUpload>
-            <label htmlFor="imageUpload">이미지 첨부</label>
-            <input
-              type="file"
-              id="imageUpload"
-              name="imageUpload"
-              onChange={(e) => dispatch(setImage(URL.createObjectURL(e.target.files[0])))}
-            />
-          </StImageUpload>
-        </BottomPanel>
       </InnerContainer>
     </OuterContainer>
   );

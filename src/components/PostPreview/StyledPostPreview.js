@@ -5,9 +5,9 @@ export const StPostPreview = styled.div`
   border-radius: 20px;
   color: white;
   padding: 30px;
-  width: 600px;
+  width: 850px;
   height: auto;
-  min-height: 550px;
+  min-height: 800px;
   transition: background-color 0.5s ease;
   &:hover {
     background-color: #2c2c2c;
@@ -93,7 +93,7 @@ export const StBody = styled.div`
   border-bottom: 2px solid gray;
   padding: 0 0 25px 0;
   height: auto;
-  min-height: 320px;
+  min-height: 500px;
   margin-top: 10px;
   line-height: 1.4;
 `;
@@ -105,6 +105,7 @@ export const StNotices = styled.div`
   padding: 0 0 25px 0;
   margin-top: 20px;
   height: auto;
+  min-height: 200px;
 `;
 
 export const StImageWrapper = styled.div`

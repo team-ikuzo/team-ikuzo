@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const OuterContainer = styled.div`
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   margin-top: 20px;
@@ -12,9 +12,9 @@ export const InnerContainer = styled.div`
   grid-template-rows: auto 1fr;
   grid-template-columns: 0fr 1fr;
   gap: 10px;
-  width: 1400px;
+  width: 1500px;
   height: auto;
-  min-height: 800px;
+  min-height: 600px;
   background-color: #4c4c4c;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 1);
@@ -31,19 +31,11 @@ export const RightPanel = styled.div`
 export const LeftPanel = styled.div`
   grid-row: 1 / span 1;
   grid-column: 1 / 2;
-  display: flex;
   justify-content: center;
   align-items: center;
   height: auto;
-  min-height: 600px;
-  width: 650px;
+  min-height: 500px;
   border-radius: 20px;
-`;
-
-export const BottomPanel = styled.div`
-  grid-row: 2 / 3;
-  grid-column: 1 / 3;
-  padding-right: 20px;
 `;
 
 export const StTitle = styled.div`
@@ -51,7 +43,7 @@ export const StTitle = styled.div`
 
   input {
     height: 50px;
-    width: 700px;
+    width: 100%;
     border: 2px solid black;
     font-size: 15px;
     border-radius: 15px;
@@ -84,12 +76,13 @@ export const StNotices = styled.div`
   margin-bottom: 20px;
   input {
     height: 80px;
-    width: 700px;
+    width: 100%;
 
     border: 2px solid black;
     font-size: 15px;
     border-radius: 15px;
     margin-top: 5px;
+    margin-bottom: 20px;
     padding-left: 5px;
     background-color: rgb(233, 233, 233);
     transition: background-color 0.8s ease;
@@ -106,6 +99,7 @@ export const StBody = styled.div`
   margin-bottom: 10px;
 
   textarea {
+    margin-top: 10px;
     width: 100%;
     min-height: 120px;
     height: auto;
@@ -126,20 +120,48 @@ export const StBody = styled.div`
 export const StImageUpload = styled.div`
   color: white;
   margin-bottom: 20px;
+  display: flex;
+  input[type='file'] {
+    width: 200px;
+    height: 150px;
+    display: none;
+    width: 200px;
+    height: 150px;
+    background-color: #2c2c2c;
+    padding: 10px;
+    border: 3px dashed #7c7c7c;
+    border-radius: 20px;
+  }
 
   label {
     display: block;
+    height: 24px;
     margin-bottom: 10px;
+    margin-top: 30px;
+    background-color: #2c2c2c;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    width: 45%;
+    border-radius: 6px;
+    cursor: pointer;
   }
+`;
 
-  input[type='file'] {
-    width: 100%;
-    color: white;
-    background-color: #333;
-    padding: 10px;
-    border: 1px solid #555;
-    border-radius: 5px;
-  }
+export const StImageDeleteBtn = styled.button`
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 30px;
+  margin-left: auto;
+  background-color: #2c2c2c;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  width: 45%;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
 `;
 
 export const StButton = styled.button`

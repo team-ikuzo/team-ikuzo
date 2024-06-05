@@ -8,13 +8,10 @@ const PostPreview = () => {
   const dispatch = useDispatch();
   const title = useSelector((state) => state.postSlice.title);
   const body = useSelector((state) => state.postSlice.body);
-  const name = useSelector((state) => state.postSlice.name);
-  const job = useSelector((state) => state.postSlice.job);
   const hashtags = useSelector((state) => state.postSlice.hashtags);
-  const likes = useSelector((state) => state.postSlice.likesCount);
-  const commentsCount = useSelector((state) => state.postSlice.commentsCount);
   const notices = useSelector((state) => state.postSlice.notices);
-  const imageUrl = useSelector((state) => state.postSlice.image);
+  const images = useSelector((state) => state.postSlice.images);
+  const localimages = useSelector((state) => state.postSlice.localimages);
 
   const StButton = {
     border: 'none',
@@ -53,7 +50,7 @@ const PostPreview = () => {
             </span>
           );
         })}
-        <StImageWrapper>{imageUrl && <img src={imageUrl} alt="Uploaded" />}</StImageWrapper>
+        <StImageWrapper>{localimages && <img src={localimages} alt="Uploaded" />}</StImageWrapper>
       </StBody>
 
       <StNotices>{notices}</StNotices>
