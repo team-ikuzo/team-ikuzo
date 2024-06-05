@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase';
 import {
+  StCardContainer,
   StCard,
   StContent,
   StCount,
@@ -11,9 +12,12 @@ import {
   StProfileDummyImage,
   StTitle
 } from './StyledCard';
+import { useNavigate } from 'react-router-dom';
+import { StContainer } from '@/pages/myPage/StyledMyPage';
 
 const Card = ({ users, order }) => {
   const [posts, setPosts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const FetchData = async () => {
@@ -48,7 +52,7 @@ const Card = ({ users, order }) => {
     <>
       {posts.map((post) => {
         return (
-          <div key={post.id}>
+          <StCardContainer key={post.id} onClick={() => navigate(`/post/${post.id}`)}>
             <StCard>
               <StHashtags>
                 {post.hashtags && post.hashtags.map((hashtag, index) => <p key={index}>{hashtag}</p>)}
@@ -64,10 +68,10 @@ const Card = ({ users, order }) => {
               </StNameCard>
               <StCountBox>
                 <StCount>🖤{post.likes_count}</StCount>
-                <StCount>💬{post.comments_count}</StCount>
+                {/* <StCount>💬{post.comments_count}</StCount> */}
               </StCountBox>
             </StCard>
-          </div>
+          </StCardContainer>
         );
       })}
     </>

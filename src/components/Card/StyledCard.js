@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export const StCardContainer = styled.div`
+  cursor: pointer;
+`;
+
 export const StCard = styled.div`
   width: 280px;
   background-color: #4c4c4c;
