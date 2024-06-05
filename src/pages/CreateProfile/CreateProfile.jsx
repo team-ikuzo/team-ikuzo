@@ -5,20 +5,15 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { StLi } from './StyledCreateProfile';
 
+import { useNavigate } from 'react-router-dom';
+
 export const CreateProfile = () => {
+  const navigate = useNavigate();
   const [isProfile, setIsProfile] = useState(false);
-  useEffect(() => {
-    const getProfile = async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-
-      const { data: profile } = await supabase.from('users').select('*').eq('user_id', user.id);
-
-      if (profile.length > 0) setIsProfile(true);
-    };
-    getProfile();
-  }, []);
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
+  };
 
   const [inputs, setInputs] = useState({
     nickname: '',
@@ -47,6 +42,20 @@ export const CreateProfile = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+
+      const { data: profile } = await supabase.from('users').select('*').eq('user_id', user.id);
+
+      if (profile.length > 0) setIsProfile(true);
+    };
+    getProfile();
+  }, []);
+
   if (isProfile) return <Navigate to={'/'} />;
 
   return (
@@ -73,7 +82,10 @@ export const CreateProfile = () => {
         <StLi>
           <Input name={'gender'} label={'성별'} type={'text'} value={inputs.gender} onChange={handleInputChange} />
         </StLi>
-        <button>저장</button>
+        <div>
+          <button>저장</button>
+          <button onClick={signOut}>Log Out</button>
+        </div>
       </form>
     </Page>
   );
