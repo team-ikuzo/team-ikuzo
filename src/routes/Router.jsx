@@ -9,6 +9,7 @@ import MyPage from '../pages/myPage/MyPage';
 
 // react-router-dom 6v
 import Post from '@/pages/Post/Post';
+import UpdateProfile from '@/pages/UpdateProfile/UpdateProfile';
 
 // react-router-dom 6v
 
@@ -34,8 +35,17 @@ const router = createBrowserRouter([
         element: <CreatePost />
       },
       {
+<<<<<<< HEAD
         path: '/myPage',
         element: <MyPage />
+=======
+        path: '/myPages',
+        element: <MyPages />
+      },
+      {
+        path: '/updateProfile/:id',
+        element: <UpdateProfile />
+>>>>>>> dev
       }
     ]
   },
@@ -51,7 +61,14 @@ const router = createBrowserRouter([
     path: '/create-post',
     element: <CreatePost />
   },
+<<<<<<< HEAD
 
+=======
+  {
+    path: '/myPages',
+    element: <MyPages />
+  },
+>>>>>>> dev
   { path: '/sign-up', element: <SignUp /> }
 ]);
 
