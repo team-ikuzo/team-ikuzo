@@ -6,7 +6,6 @@ import { SignUp } from '@/pages/SignUp';
 import MyPages from '@/pages/myPage/MyPages';
 import { createBrowserRouter } from 'react-router-dom';
 import CreatePost from '../components/CreatePost/CreatePost';
-import Post from '@/pages/Post/Post';
 
 // react-router-dom 6v
 
@@ -22,6 +21,14 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <Home />
+      },
+      {
+        path: '/create-post',
+        element: <CreatePost />
+      },
+      {
+        path: '/myPages',
+        element: <MyPages />
       }
     ]
   },
@@ -32,17 +39,6 @@ const router = createBrowserRouter([
   {
     path: '/create-profile',
     element: <CreateProfile />
-  },
-  {
-    path: '/create-post',
-    element: <CreatePost />
-  },
-  {
-    path: '/myPages',
-    element: <MyPages />
-  },{
-    path : '/post/:id',
-    element : <Post/>
   },
   { path: '/sign-up', element: <SignUp /> }
 ]);

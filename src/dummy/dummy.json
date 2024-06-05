@@ -78,5 +78,105 @@
     "job": "Database Administrator",
     "likesCount": 830,
     "commentsCount": 90
+  },
+  {
+    "hashtags": ["Front-end", "UI Designer", "Full-stack"],
+    "title": "Project Alpha",
+    "body": "This is a detailed description of Project Alpha, which involves creating a dynamic web application using modern front-end technologies.",
+    "summary": "A project focused on developing a dynamic web application.",
+    "name": "Alice Johnson",
+    "job": "Front-end Developer",
+    "likesCount": 450,
+    "commentsCount": 34
+  },
+  {
+    "hashtags": ["Back-end", "DevOps", "Database"],
+    "title": "Project Beta",
+    "body": "Project Beta is centered around developing a robust API using Node.js and Express, ensuring scalability and security.",
+    "summary": "Developing a scalable and secure API.",
+    "name": "Bob Smith",
+    "job": "Back-end Developer",
+    "likesCount": 789,
+    "commentsCount": 45
+  },
+  {
+    "hashtags": ["Front-end", "Back-end", "Full-stack"],
+    "title": "Project Gamma",
+    "body": "Project Gamma is an integrated project that combines both front-end and back-end development to create a full-stack solution.",
+    "summary": "A full-stack development project.",
+    "name": "Charlie Brown",
+    "job": "Full-stack Developer",
+    "likesCount": 300,
+    "commentsCount": 20
+  },
+  {
+    "hashtags": ["UI Designer", "Front-end", "Designer"],
+    "title": "Project Delta",
+    "body": "The focus of Project Delta is on creating an interactive and responsive user interface using React.",
+    "summary": "Creating a responsive UI with React.",
+    "name": "Diana Prince",
+    "job": "UI Designer",
+    "likesCount": 620,
+    "commentsCount": 60
+  },
+  {
+    "hashtags": ["Back-end", "DevOps", "Database", "Security"],
+    "title": "Project Epsilon",
+    "body": "Project Epsilon aims to develop a microservices architecture using Spring Boot, promoting modularity and efficiency.",
+    "summary": "Developing a microservices architecture.",
+    "name": "Ethan Hunt",
+    "job": "Back-end Developer",
+    "likesCount": 940,
+    "commentsCount": 78
+  },
+  {
+    "hashtags": ["Designer", "UI Designer", "Front-end"],
+    "title": "Project Zeta",
+    "body": "Project Zeta focuses on creating aesthetically pleasing and user-friendly designs for mobile applications.",
+    "summary": "Creating user-friendly designs for mobile apps.",
+    "name": "Fiona Gallagher",
+    "job": "Designer",
+    "likesCount": 580,
+    "commentsCount": 40
+  },
+  {
+    "hashtags": ["UI Designer", "Front-end", "Full-stack", "Designer"],
+    "title": "Project Eta",
+    "body": "Project Eta involves redesigning the user interface of an existing web application to improve user experience.",
+    "summary": "Redesigning the UI for better UX.",
+    "name": "George Washington",
+    "job": "UI Designer",
+    "likesCount": 720,
+    "commentsCount": 50
+  },
+  {
+    "hashtags": ["Back-end", "Database", "DevOps", "Security", "Data Engineer"],
+    "title": "Project Theta",
+    "body": "Project Theta is focused on optimizing database performance and implementing new data storage solutions.",
+    "summary": "Optimizing database performance.",
+    "name": "Hannah Montana",
+    "job": "Database Administrator",
+    "likesCount": 830,
+    "commentsCount": 90
+  },
+  {
+    "hashtags": ["Front-end", "UI Designer", "Full-stack"],
+    "title": "Project Alpha",
+    "body": "This is a detailed description of Project Alpha, which involves creating a dynamic web application using modern front-end technologies.",
+    "summary": "A project focused on developing a dynamic web application.",
+    "name": "Alice Johnson",
+    "job": "Front-end Developer",
+    "likesCount": 450,
+    "commentsCount": 34
+  },
+  {
+    "hashtags": ["Back-end", "DevOps", "Database"],
+    "title": "Project Beta",
+    "body": "Project Beta is centered around developing a robust API using Node.js and Express, ensuring scalability and security.",
+    "summary": "Developing a scalable and secure API.",
+    "name": "Bob Smith",
+    "job": "Back-end Developer",
+    "likesCount": 789,
+    "commentsCount": 45
   }
 ]

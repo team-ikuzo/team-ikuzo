@@ -21,8 +21,6 @@ function App() {
           <RouterProvider router={router} />
         </Provider>
         <ReactQueryDevtools initialIsOpen={false} />
-
-        <h1>Hello, Team IKUZO!</h1>
       </QueryClientProvider>
     </>
   );

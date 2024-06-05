@@ -3,7 +3,7 @@ import { Page } from '@/components/Page';
 import { supabase } from '@/supabase';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { StLi } from './StyledCreateProfile';
+import { StBackground, StButtons, StDiv, StForm, StInput, StTitle } from './StyledCreateProfile';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -60,33 +60,38 @@ export const CreateProfile = () => {
 
   return (
     <Page>
-      <form onSubmit={handleSubmit}>
-        <StLi>
-          <Input
-            name={'nickname'}
-            label={'닉네임'}
-            type={'text'}
-            value={inputs.nickname}
-            onChange={handleInputChange}
-          />
-        </StLi>
-        <StLi>
-          <Input
-            name={'birthDate'}
-            label={'생일'}
-            type={'date'}
-            value={inputs.birthDate}
-            onChange={handleInputChange}
-          />
-        </StLi>
-        <StLi>
-          <Input name={'gender'} label={'성별'} type={'text'} value={inputs.gender} onChange={handleInputChange} />
-        </StLi>
-        <div>
-          <button>저장</button>
-          <button onClick={signOut}>Log Out</button>
-        </div>
-      </form>
+      <StBackground>
+        <StDiv>
+          <StTitle>YOUR PROFILE</StTitle>
+          <StForm onSubmit={handleSubmit}>
+            <StInput>
+              <Input
+                name={'nickname'}
+                label={'닉네임'}
+                type={'text'}
+                value={inputs.nickname}
+                onChange={handleInputChange}
+              />
+            </StInput>
+            <StInput>
+              <Input
+                name={'birthDate'}
+                label={'생일'}
+                type={'date'}
+                value={inputs.birthDate}
+                onChange={handleInputChange}
+              />
+            </StInput>
+            <StInput>
+              <Input name={'gender'} label={'성별'} type={'text'} value={inputs.gender} onChange={handleInputChange} />
+            </StInput>
+            <StButtons>
+              <button className="save">저장</button>
+              <button onClick={signOut}>Log Out</button>
+            </StButtons>
+          </StForm>
+        </StDiv>
+      </StBackground>
     </Page>
   );
 };
