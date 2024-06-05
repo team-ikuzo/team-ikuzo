@@ -5,43 +5,41 @@ import {
   StCountBox,
   StHashtags,
   StInfo,
+  StLink,
   StNameCard,
   StProfileDummyImage,
   StTitle
 } from './StyledCard';
 
-const Card = () => {
-  const post = {
-    hashtags: ['Front-end', 'Back-end', 'Designer', 'UI Designer'],
-    title: 'Hello World!',
-    body: 'Hello My Team!!! Occaecat dolore ex minim duis do exercitation aute excepteur incididunt do dolore ad. Occaecat dolore ex minim duis do exercitation aute excepteur incididunt do dolore ad. Occaecat dolore ex minim duis do exercitation aute excepteur incididunt do dolore ad.',
-    name: 'James',
-    job: 'Web Developer',
-    likesCount: 126,
-    commentsCount: 12
-  };
-
+const Card = ({ post: { id: postId, author_id: userId, title, body, hashtags, author_name: username } }) => {
+  console.log(title);
+  console.log(body);
   return (
-    <StCard>
-      <StHashtags>
-        {post.hashtags.map((hashtag) => (
-          <p>{hashtag}</p>
-        ))}
-      </StHashtags>
-      <StTitle>{post.title}</StTitle>
-      <StContent>{post.body}</StContent>
-      <StNameCard>
-        <StProfileDummyImage />
-        <StInfo>
-          <p className="name">{post.name}</p>
-          <p className="job">{post.job}</p>
-        </StInfo>
-      </StNameCard>
-      <StCountBox>
-        <StCount>{post.likesCount}</StCount>
-        <StCount>{post.commentsCount}</StCount>
-      </StCountBox>
-    </StCard>
+    <StLink to={`/post/${postId}`}>
+      <StCard>
+        <StHashtags>
+          {/* {hashtags.map((hashtag) => (
+            <p>{hashtag}</p>
+          ))} */}
+          <p>Front-end</p>
+          <p>Back-end</p>
+          <p>UI Design</p>
+        </StHashtags>
+        <StTitle>{title}</StTitle>
+        <StContent>{body}</StContent>
+        <StNameCard>
+          <StProfileDummyImage />
+          <StInfo>
+            <p className="name">{username}</p>
+            {/* <p className="job">{post.job}</p> */}
+          </StInfo>
+        </StNameCard>
+        <StCountBox>
+          <StCount>126</StCount>
+          <StCount>10</StCount>
+        </StCountBox>
+      </StCard>
+    </StLink>
   );
 };
 

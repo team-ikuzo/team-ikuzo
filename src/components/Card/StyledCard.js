@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const StCard = styled.div`
@@ -8,6 +9,9 @@ export const StCard = styled.div`
   flex-direction: column;
   gap: 20px;
   border-radius: 20px;
+  a {
+    text-decoration: none;
+  }
 `;
 
 export const StHashtags = styled.div`
@@ -22,6 +26,7 @@ export const StHashtags = styled.div`
     font-weight: bold;
     padding: 6px 10px;
     background-color: white;
+    color: black;
   }
 `;
 
@@ -78,4 +83,8 @@ export const StCount = styled.p`
   color: white;
   font-size: 16px;
   font-weight: bold;
+`;
+
+export const StLink = styled(Link)`
+  text-decoration: none;
 `;
