@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StPostPreview, StHashtags, StHashtag, StTitle, StBody, StNotices, StImageWrapper } from './StyledPostPreview';
-import { setHashtags, setHashtagsDelete } from '../../redux/createPostSlice';
+import { setHashtags, setHashtagsDelete } from '../../redux/slices/createPostSlice';
 import { Card } from '../Card/Card';
 
 const PostPreview = () => {
