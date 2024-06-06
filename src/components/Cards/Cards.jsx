@@ -7,34 +7,30 @@ import {
   StCount,
   StCountBox,
   StHashtags,
-  StInfo,
   StNameCard,
-  StProfileDummyImage,
+  StProfileImage,
+  StInfo,
   StTitle
 } from './StyledCard';
 import { useNavigate } from 'react-router-dom';
-import { StContainer } from '@/pages/myPage/StyledMyPage';
 
-const Card = ({ users, order }) => {
+const Cards = ({ user, order, post }) => {
+  // console.log(user);
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const FetchData = async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-      console.log({ user });
-
-      const { data, error } = await supabase.from('posts').select('*').eq('author_id', user.id);
+    const fetchData = async () => {
+      const { data, error } = await supabase.from('posts').select('*');
       if (error) {
-        console.log('error =>', error);
+        console.log('Error fetching posts:', error);
       } else {
-        console.log('data=>', data);
-        setPosts(data);
+        console.log('Fetched posts:', data);
+        const sortedPosts = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setPosts(sortedPosts);
       }
     };
-    FetchData();
+    fetchData();
   }, []);
 
   // 최신순, 좋아요순 정렬
@@ -60,10 +56,10 @@ const Card = ({ users, order }) => {
               <StTitle>{post.title}</StTitle>
               <StContent>{post.body}</StContent>
               <StNameCard>
-                <StProfileDummyImage src={users[0].profile_image_path} />
+                <StProfileImage src={user.profile_image_path} />
                 <StInfo>
-                  <p className="name">{users[0].display_name}</p>
-                  <p className="job">{users[0].job}</p>
+                  <p className="name">{user.display_name}</p>
+                  <p className="job">{user.job}</p>
                 </StInfo>
               </StNameCard>
               <StCountBox>
@@ -78,4 +74,4 @@ const Card = ({ users, order }) => {
   );
 };
 
-export { Card };
+export { Cards };

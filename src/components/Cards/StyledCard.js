@@ -42,9 +42,7 @@ export const StContent = styled.p`
   color: white;
 `;
 
-export const StProfileImage = styled.img``;
-
-export const StProfileDummyImage = styled.div`
+export const StProfileImage = styled.img`
   width: 48px;
   height: 48px;
   border-radius: 24px;

@@ -17,7 +17,7 @@ import {
   StTabButton,
   StPosts
 } from './StyledMyPage';
-import { Card } from '../../components/Card';
+import { Cards } from '../../components/Cards';
 import { supabase } from '../../supabase';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,10 +25,12 @@ function MyPage() {
   const [users, setUsers] = useState([]);
   const [order, setOrder] = useState('');
 
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const FetchData = async () => {
+      setIsLoading(true);
       const {
         data: { user }
       } = await supabase.auth.getUser();
@@ -41,13 +43,19 @@ function MyPage() {
         console.log('data=>', data);
         setUsers(data);
       }
+      setIsLoading(false);
     };
     FetchData();
   }, []);
 
+  if (isLoading === true) {
+    return <h1>로딩중</h1>;
+  }
+
   return (
     <div>
       {users.map((user) => {
+        console.log(user.profile_image_path);
         return (
           <div key={user.user_id}>
             <StContainer>
@@ -58,8 +66,8 @@ function MyPage() {
 
                     <StProfileInfo>
                       <StProfileTitle>{user.display_name}</StProfileTitle>
-                      <StProfileLink href="http://www.github.com">www.github.com</StProfileLink>
-                      <StProfileLink href="http://www.velog.com">www.velog.com</StProfileLink>
+                      {/* <StProfileLink href="http://www.github.com">www.github.com</StProfileLink>
+                      <StProfileLink href="http://www.velog.com">www.velog.com</StProfileLink> */}
                     </StProfileInfo>
 
                     <StProfileButton
@@ -87,7 +95,7 @@ function MyPage() {
                   </StTabs>
 
                   <StPosts>
-                    <Card users={users} order={order} />
+                    <Cards user={user} order={order} />
                   </StPosts>
                 </StProfile>
               </StMain>

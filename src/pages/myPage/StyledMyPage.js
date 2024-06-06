@@ -23,10 +23,10 @@ export const StProfileHeader = styled.div`
   position: relative;
 `;
 
-export const StProfilePhoto = styled.div`
+export const StProfilePhoto = styled.img`
   width: 170px;
   height: 170px;
-  background-color: white;
+
   border-radius: 20%;
 `;
 
