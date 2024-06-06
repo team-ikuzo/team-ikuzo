@@ -8,7 +8,7 @@ import Modal from './Modal'; // Modal 컴포넌트 임포트
 
 // 스타일드 컴포넌트
 const PostContainer = styled.div`
-  max-width: 50%;
+  min-width: 50%;
   height: auto;
   padding: 30px;
   margin: 30px auto;
@@ -64,6 +64,10 @@ const LikeButton = styled.button`
   &:hover {
     transform: scale(1.2);
   }
+
+  &.liked {
+    color: red;
+  }
 `;
 
 const PostTitle = styled.h1`
@@ -106,7 +110,8 @@ const MediaPart = styled.div`
 `;
 
 const ApplyButton = styled.button`
-  background-color: #4caf50;
+  margin-top: 20px;
+  background-color: #2b2e2b;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -116,7 +121,7 @@ const ApplyButton = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #45a049;
+    background-color: #999999;
   }
 `;
 
@@ -127,7 +132,6 @@ const Post = () => {
   const [userId, setUserId] = useState(null); // 현재 사용자 ID
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [application, setApplication] = useState({
-    name: '',
     part: '',
     content: ''
   });
@@ -175,13 +179,13 @@ const Post = () => {
   const handleSubmitApplication = async () => {
     if (userId) {
       try {
-        const { payload } = await dispatch(submitApplication({
+        await dispatch(submitApplication({
           userId,
           postId: id,
           hashtags: [application.part], // 배열로 변환
           body: application.content
         })).unwrap();
-        console.log('Application submitted successfully:', payload);
+        console.log('Application submitted successfully');
         setIsModalOpen(false);
       } catch (error) {
         console.error('Application submission error:', error);
@@ -210,8 +214,10 @@ const Post = () => {
           <UserJob>{post.job}</UserJob>
         </UserInf>
         <LikesSection>
-          <LikeButton onClick={handleLikeClick}>{isLiked ? '🤍' : '🖤'}</LikeButton>
-          <div>{likes.filter((like) => like.post_id === id).length}</div>
+          <LikeButton onClick={handleLikeClick} className={isLiked ? 'liked' : ''}>
+            {isLiked ? '❤️' : '🤍'}
+          </LikeButton>
+          <div>{post.likes_count}</div>
         </LikesSection>
       </TopSection>
       <PostTitle>{post.title}</PostTitle>
@@ -223,25 +229,21 @@ const Post = () => {
       </HashContainer>
       <SectionTitle>미디어</SectionTitle>
       <MediaPart>
-        <img
-          style={{
-            objectFit: 'contain',
-            maxWidth: '400px'
-          }}
-          src="https://previews.123rf.com/images/toozdesign/toozdesign1710/toozdesign171000021/87433912-%EB%9D%BC%EC%9D%B8-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8.jpg"
-          alt=""
-        />
+        {post.post_image_url ? (
+          <img
+            style={{
+              objectFit: 'contain',
+              maxWidth: '400px'
+            }}
+            src={post.post_image_url}
+            alt="Post media"
+          />
+        ) : (
+          <div>첨부 이미지가 없습니다.</div>
+        )}
       </MediaPart>
       <ApplyButton onClick={handleApplyClick}>지원하기</ApplyButton>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <input
-          type="text"
-          placeholder="이름을 입력하세요"
-          name="name"
-          value={application.name}
-          onChange={handleInputChange}
-        />
-        <br />
         <input
           type="text"
           placeholder="지원 파트를 입력하세요"

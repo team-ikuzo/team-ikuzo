@@ -5,7 +5,9 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
+
 import { store } from './redux/store';
+
 const queryClient = new QueryClient();
 
 const Globalstyle = createGlobalStyle`
