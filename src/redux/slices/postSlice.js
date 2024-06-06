@@ -144,7 +144,7 @@ const postSlice = createSlice({
       .addCase(submitApplication.pending, (state) => {
         state.loading = true;
       })
-      .addCase(submitApplication.fulfilled, (state, action) => {
+      .addCase(submitApplication.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(submitApplication.rejected, (state, action) => {
