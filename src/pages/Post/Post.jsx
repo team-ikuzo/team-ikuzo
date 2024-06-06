@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPost, toggleLike, submitApplication } from '../../redux/slices/postSlice';
+import { fetchPost, toggleLike, submitApplication, setHashtags, setHashtagsDelete } from '../../redux/slices/postSlice';
 import styled from 'styled-components';
 import { supabase } from '@/supabase';
 import Modal from './Modal'; // Modal 컴포넌트 임포트
 
 // 스타일드 컴포넌트
 const PostContainer = styled.div`
-  min-width: 50%;
+  width: 50%;
   height: auto;
   padding: 30px;
   margin: 30px auto;
@@ -75,6 +75,17 @@ const PostTitle = styled.h1`
   font-weight: bold;
   margin-bottom: 20px;
 `;
+const PostNotice = styled.h1`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const PostNoticeBpdy = styled.h1`
+  font-size: 15px;
+  /* font-weight: bold; */
+  margin-bottom: 10px;
+`;
 
 const SectionTitle = styled.h2`
   font-size: 22px;
@@ -106,12 +117,90 @@ const HashTags = styled.div`
 
 const MediaPart = styled.div`
   max-width: 300px;
-  max-height: 250px;
+  height: auto;
 `;
 
 const ApplyButton = styled.button`
   margin-top: 20px;
-  background-color: #2b2e2b;
+  font-weight: bold;
+  background-color: #3a5240;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: background-color 0.3s;
+  border: 1px solid #45a04941;
+
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+
+const SelectedHashtagsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+`;
+
+const SelectedHashtag = styled.div`
+  background-color: #fff;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+`;
+
+const StSelect = styled.div`
+  margin-bottom: 20px;
+  select {
+    height: 32px;
+    border: 2px solid black;
+    font-size: 15px;
+    border-radius: 15px;
+    margin-top: 5px;
+    padding-left: 5px;
+    background-color: rgb(233, 233, 233);
+  }
+`;
+
+const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+`;
+
+const Label = styled.label`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  min-height: 300px;
+  resize: none;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  margin-top: 20px;
+`;
+
+const SubmitButton = styled.button`
+  background-color: #2d3b2d;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -121,18 +210,32 @@ const ApplyButton = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #999999;
+    background-color: #45a049;
+  }
+`;
+
+const CloseButton = styled.button`
+  background-color: #545454;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e53935;
   }
 `;
 
 const Post = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { post, loading, error, likes } = useSelector((state) => state.post);
+  const { post, loading, error, likes, hashtags } = useSelector((state) => state.post);
   const [userId, setUserId] = useState(null); // 현재 사용자 ID
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [application, setApplication] = useState({
-    part: '',
     content: ''
   });
 
@@ -176,15 +279,26 @@ const Post = () => {
     setApplication((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSelectChange = (e) => {
+    const selectedValue = e.target.value;
+    if (hashtags.includes(selectedValue)) {
+      dispatch(setHashtagsDelete(selectedValue));
+    } else {
+      dispatch(setHashtags(selectedValue));
+    }
+  };
+
   const handleSubmitApplication = async () => {
     if (userId) {
       try {
-        await dispatch(submitApplication({
-          userId,
-          postId: id,
-          hashtags: [application.part], // 배열로 변환
-          body: application.content
-        })).unwrap();
+        await dispatch(
+          submitApplication({
+            userId,
+            postId: id,
+            hashtags, // 선택된 해시태그 사용
+            body: application.content
+          })
+        ).unwrap();
         console.log('Application submitted successfully');
         setIsModalOpen(false);
       } catch (error) {
@@ -204,11 +318,7 @@ const Post = () => {
   return (
     <PostContainer>
       <TopSection>
-        <PostImage
-          src={
-            'https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2017%2F07%2Ftime-15-influential-video-game-characters-0.jpg?cbr=1&q=90'
-          }
-        />
+        <PostImage src={post.users.profile_image_path || 'https://via.placeholder.com/800'} alt="Author profile" />
         <UserInf>
           <UserName>{post.author_name}</UserName>
           <UserJob>{post.job}</UserJob>
@@ -221,6 +331,8 @@ const Post = () => {
         </LikesSection>
       </TopSection>
       <PostTitle>{post.title}</PostTitle>
+      <PostNotice>공지사항</PostNotice>
+     <PostNoticeBpdy> {post.notice}</PostNoticeBpdy>
       <SectionTitle>프로젝트 및 팀 소개</SectionTitle>
       <PostingSection>{post.body}</PostingSection>
       <SectionTitle>모집 분야</SectionTitle>
@@ -244,22 +356,46 @@ const Post = () => {
       </MediaPart>
       <ApplyButton onClick={handleApplyClick}>지원하기</ApplyButton>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <input
-          type="text"
-          placeholder="지원 파트를 입력하세요"
-          name="part"
-          value={application.part}
-          onChange={handleInputChange}
-        />
-        <br />
-        <textarea
-          placeholder="간단한 자기소개를 입력하세요"
-          name="content"
-          value={application.content}
-          onChange={handleInputChange}
-        />
-        <br />
-        <button onClick={handleSubmitApplication}>지원하기</button>
+        <ModalContent>
+          <Label>지원 파트를 선택하세요</Label>
+          <StSelect>
+            <select name="hashtag" onChange={handleSelectChange}>
+              <option value="Front-end">Front-end</option>
+              <option value="Back-end">Back-end</option>
+              <option value="Python">Python</option>
+              <option value="Java">Java</option>
+              <option value="Kotlin">Kotlin</option>
+              <option value="Spring">Spring</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="React">React</option>
+              <option value="NextJs">NextJs</option>
+              <option value="TypeScript">TypeScript</option>
+              <option value="Deep-learning">Deep-learning</option>
+              <option value="DataAnalysis">DataAnalysis</option>
+              <option value="UI/UX-Designer">UI/UX-Designer</option>
+              <option value="Unity">Unity</option>
+              <option value="C">C</option>
+            </select>
+          </StSelect>
+          <SelectedHashtagsContainer>
+            {hashtags.map((hashtag, index) => (
+              <SelectedHashtag key={index} onClick={() => dispatch(setHashtagsDelete(hashtag))}>
+                {hashtag}
+              </SelectedHashtag>
+            ))}
+          </SelectedHashtagsContainer>
+          <Label style={{ marginBottom: '10px' }}>지원사항</Label>
+          <TextArea
+            placeholder="간단한 자기소개를 입력하세요."
+            name="content"
+            value={application.content}
+            onChange={handleInputChange}
+          />
+          <ButtonContainer>
+            <SubmitButton onClick={handleSubmitApplication}>지원하기</SubmitButton>
+            <CloseButton onClick={handleCloseModal}>닫기</CloseButton>
+          </ButtonContainer>
+        </ModalContent>
       </Modal>
     </PostContainer>
   );

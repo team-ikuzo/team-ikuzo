@@ -32,14 +32,14 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, children }) => {
   if (!isOpen) return null;
 
   return (
     <ModalBackdrop>
       <ModalContent>
         {children} <br />
-        <CloseButton onClick={onClose}>닫기</CloseButton>
+
       </ModalContent>
     </ModalBackdrop>
   );
