@@ -55,7 +55,7 @@ function MyPage() {
   return (
     <div>
       {users.map((user) => {
-        console.log(user.profile_image_path);
+        // console.log(user.profile_image_path);
         return (
           <div key={user.user_id}>
             <StContainer>
