@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import {
+  clearHashtags,
+  clearImage,
   setBody,
   setHashtags,
-  setNotices,
-  setTitle,
-  setImageURL,
   setLocalImageURL,
-  clearImage
+  setNotices,
+  setTitle
 } from '../../redux/createPostSlice';
+import { supabase } from '../../supabase';
 import PostPreview from '../PostPreview/PostPreview';
 import {
-  OuterContainer,
   InnerContainer,
   LeftPanel,
+  OuterContainer,
   RightPanel,
   StBody,
+  StButton,
+  StImageDeleteBtn,
+  StImageUpload,
   StNotices,
   StSelect,
-  StTitle,
-  StImageUpload,
-  StButton,
-  StImageDeleteBtn
+  StTitle
 } from './StyledCreatePost';
-import { supabase } from '../../supabase';
-import { v4 as uuidv4 } from 'uuid';
 
 const CreatePost = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const title = useSelector((state) => state.postSlice.title);
@@ -54,9 +56,9 @@ const CreatePost = () => {
 
   const handleSave = async () => {
     try {
-      let publicURL = imageURL;
       let postId = uuidv4();
       let imageId = uuidv4();
+      let imageUrl = null;
       if (imageFile) {
         // 이미지 업로드
         const { data: storageData, error: storageError } = await supabase.storage
@@ -67,22 +69,31 @@ const CreatePost = () => {
           console.error('이미지 업로드 오류:', storageError);
           return;
         }
+        const result = supabase.storage.from('post_image_storage').getPublicUrl(`${postId}/${imageId}`);
+        console.log(result.data.publicUrl);
       }
-      const result = supabase.storage.from('post_image_storage').getPublicUrl(`${postId}/${imageId}`);
-
+      console.log(imageUrl);
       // 게시글 데이터 저장
       const { error: insertError } = await supabase.from('posts').insert({
         title,
         body,
         hashtags,
         notice: notices,
-        post_image_url: result.data.publicUrl
+        post_image_url: imageUrl
       });
 
       if (insertError) {
         console.error('게시글 저장 오류:', insertError);
       } else {
         console.log('게시글 저장 성공');
+        setBody, setHashtags, setLocalImageURL, setNotices, setTitle;
+        dispatch(setBody(''));
+        dispatch(clearHashtags());
+        dispatch(setNotices(''));
+        dispatch(setTitle(''));
+        dispatch(setLocalImageURL(''));
+
+        navigate('/');
       }
     } catch (error) {
       console.error('오류 발생:', error);
