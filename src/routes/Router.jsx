@@ -52,11 +52,6 @@ const router = createBrowserRouter([
     path: '/create-profile',
     element: <CreateProfile />
   },
-  {
-    path: '/create-post',
-    element: <CreatePost />
-  },
-
   { path: '/sign-up', element: <SignUp /> }
 ]);
 
