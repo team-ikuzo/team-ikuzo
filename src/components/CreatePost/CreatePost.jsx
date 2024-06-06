@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   setBody,
   setHashtags,
-  addImage,
-  removeImage,
   setNotices,
   setTitle,
-  addlocalimages,
-  removelocalimages
+  setImageURL,
+  setLocalImageURL,
+  clearImage
 } from '../../redux/createPostSlice';
 import PostPreview from '../PostPreview/PostPreview';
 import {
@@ -25,6 +24,7 @@ import {
   StImageDeleteBtn
 } from './StyledCreatePost';
 import { supabase } from '../../supabase';
+import { v4 as uuidv4 } from 'uuid';
 
 const CreatePost = () => {
   const dispatch = useDispatch();
@@ -33,32 +33,58 @@ const CreatePost = () => {
   const body = useSelector((state) => state.postSlice.body);
   const hashtags = useSelector((state) => state.postSlice.hashtags);
   const notices = useSelector((state) => state.postSlice.notices);
-  const images = useSelector((state) => state.postSlice.images);
-  const localimages = useSelector((state) => state.postSlice.localimages);
+  const imageURL = useSelector((state) => state.postSlice.imageURL);
+  const localImageURL = useSelector((state) => state.postSlice.localimages);
 
-  // const handleImageChange = (e) => {
-  //   dispatch(addlocalimages(URL.createObjectURL(e.target.files[0])));
-  //   dispatch(addImage(e.target.files[0]));
-  // };
+  const [imageFile, setImageFile] = useState(null);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    const imageUrl = URL.createObjectURL(file);
-    dispatch(addlocalimages(imageUrl));
-    dispatch(addImage(imageUrl));
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      dispatch(setLocalImageURL(imageUrl));
+      setImageFile(file);
+    }
   };
 
   const handleRemoveImage = () => {
-    dispatch(removeImage());
-    dispatch(removelocalimages());
+    dispatch(clearImage());
+    setImageFile(null);
   };
 
-  const handleSave = async (e) => {
-    console.log(e.target.files[0]);
-    console.log(images);
+  const handleSave = async () => {
+    try {
+      let publicURL = imageURL;
+      let postId = uuidv4();
+      if (imageFile) {
+        // 이미지 업로드
+        const { data: storageData, error: storageError } = await supabase.storage
+          .from('post_image_storage')
+          .upload(`${postId}/${imageFile.name}`, imageFile);
 
-    const { data, error } = await supabase.storage.from('post_image_storage').upload('public/postContent.png', images);
-    {
+        if (storageError) {
+          console.error('이미지 업로드 오류:', storageError);
+          return;
+        }
+      }
+      const result = supabase.storage.from('post_image_storage').getPublicUrl(`${postId}/${imageFile.name}`);
+
+      // 게시글 데이터 저장
+      const { error: insertError } = await supabase.from('posts').insert({
+        title,
+        body,
+        hashtags,
+        notice: notices,
+        post_image_url: result.data.publicUrl
+      });
+
+      if (insertError) {
+        console.error('게시글 저장 오류:', insertError);
+      } else {
+        console.log('게시글 저장 성공');
+      }
+    } catch (error) {
+      console.error('오류 발생:', error);
     }
   };
 

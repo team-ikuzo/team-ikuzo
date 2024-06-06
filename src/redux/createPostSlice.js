@@ -11,8 +11,8 @@ const createPostSlice = createSlice({
     likesCount: 0,
     commentsCount: 2,
     notices: '',
-    images: null,
-    localimages: null
+    imageURL: null,
+    localImageURL: null
   },
 
   reducers: {
@@ -52,20 +52,16 @@ const createPostSlice = createSlice({
       state.notices = action.payload;
     },
 
-    addlocalimages: (state, action) => {
-      state.localimages = action.payload;
+    setImageURL: (state, action) => {
+      state.imageURL = action.payload;
+    },
+    setLocalImageURL: (state, action) => {
+      state.localImageURL = action.payload;
     },
 
-    removelocalimages: (state, action) => {
-      state.localimages = '';
-    },
-
-    addImage: (state, action) => {
-      state.images = action.payload;
-    },
-
-    removeImage: (state, action) => {
-      state.images = '';
+    clearImage: (state) => {
+      state.imageURL = null;
+      state.localImageURL = null;
     }
   }
 });
@@ -80,9 +76,8 @@ export const {
   setLikesCount,
   setCommentsCount,
   setNotices,
-  addImage,
-  removeImage,
-  addlocalimages,
-  removelocalimages
+  setImageURL,
+  setLocalImageURL,
+  clearImage
 } = createPostSlice.actions;
 export default createPostSlice.reducer;

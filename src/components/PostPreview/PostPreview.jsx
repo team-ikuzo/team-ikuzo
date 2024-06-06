@@ -10,8 +10,7 @@ const PostPreview = () => {
   const body = useSelector((state) => state.postSlice.body);
   const hashtags = useSelector((state) => state.postSlice.hashtags);
   const notices = useSelector((state) => state.postSlice.notices);
-  const images = useSelector((state) => state.postSlice.images);
-  const localimages = useSelector((state) => state.postSlice.localimages);
+  const localImageURL = useSelector((state) => state.postSlice.localImageURL);
 
   const StButton = {
     border: 'none',
@@ -42,15 +41,13 @@ const PostPreview = () => {
       </div>
 
       <StBody>
-        {body.split('\n').map((line, index) => {
-          return (
-            <span key={index}>
-              {line}
-              <br />
-            </span>
-          );
-        })}
-        <StImageWrapper>{imageUrl && <img src={imageUrl} alt="Uploaded" />}</StImageWrapper>
+        {body.split('\n').map((line, index) => (
+          <span key={index}>
+            {line}
+            <br />
+          </span>
+        ))}
+        <StImageWrapper>{localImageURL && <img src={localImageURL} alt="Uploaded" />}</StImageWrapper>
       </StBody>
 
       <StNotices>{notices}</StNotices>
