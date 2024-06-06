@@ -1,23 +1,25 @@
-import { Card } from '@/components/Card';
 import { Page } from '@/components/Page';
+import { Card } from '@/components/PostCard';
 import { supabase } from '@/supabase';
-import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { StBackground, StDiv } from './StyledHome';
 
 const Home = () => {
-  const {
-    data: posts,
-    isLoading,
-    error,
-    isFetching
-  } = useQuery({
-    queryKey: ['posts'],
-    queryFn: async () => {
-      const { data, error } = await supabase.from('posts').select('*');
-      return data;
-    }
-  });
-  console.log(posts);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase.from('posts').select('*').limit(1);
+      if (error) {
+        console.error('Error fetching posts:', error);
+      } else {
+        console.log('Fetched posts:', data);
+        const sortedPosts = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setPosts(sortedPosts);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <Page>
