@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export const StCardContainer = styled.div`
+  cursor: pointer;
+`;
+
 export const StCard = styled.div`
   width: 280px;
   background-color: #4c4c4c;
@@ -8,6 +12,7 @@ export const StCard = styled.div`
   flex-direction: column;
   gap: 20px;
   border-radius: 20px;
+  border-color: white;
 `;
 
 export const StHashtags = styled.div`
@@ -37,9 +42,7 @@ export const StContent = styled.p`
   color: white;
 `;
 
-export const StProfileImage = styled.img``;
-
-export const StProfileDummyImage = styled.div`
+export const StProfileImage = styled.img`
   width: 48px;
   height: 48px;
   border-radius: 24px;
