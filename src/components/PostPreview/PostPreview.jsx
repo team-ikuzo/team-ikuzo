@@ -1,36 +1,22 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  StPostPreview,
-  StHashtags,
-  StHashtag,
-  StTitle,
-  StBody,
-  StNotices,
-  StImageWrapper,
-} from "./StyledPostPreview";
-import {
-  setHashtags,
-  setHashtagsDelete,
-} from "../../redux/slices/createPostSlice";
-import { Card } from "../Card/Card";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { StPostPreview, StHashtags, StHashtag, StTitle, StBody, StNotices, StImageWrapper } from './StyledPostPreview';
+import { setHashtags, setHashtagsDelete } from '../../redux/createPostSlice';
+import { Card } from '../Card/Card';
 
 const PostPreview = () => {
   const dispatch = useDispatch();
   const title = useSelector((state) => state.postSlice.title);
   const body = useSelector((state) => state.postSlice.body);
-  const name = useSelector((state) => state.postSlice.name);
-  const job = useSelector((state) => state.postSlice.job);
   const hashtags = useSelector((state) => state.postSlice.hashtags);
-  const likes = useSelector((state) => state.postSlice.likesCount);
-  const commentsCount = useSelector((state) => state.postSlice.commentsCount);
   const notices = useSelector((state) => state.postSlice.notices);
-  const imageUrl = useSelector((state) => state.postSlice.image);
+  const images = useSelector((state) => state.postSlice.images);
+  const localimages = useSelector((state) => state.postSlice.localimages);
 
   const StButton = {
-    border: "none",
-    backgroundColor: "transparent",
-    pointer: "cursor",
+    border: 'none',
+    backgroundColor: 'transparent',
+    pointer: 'cursor'
   };
 
   return (
@@ -46,10 +32,7 @@ const PostPreview = () => {
             <div key={index}>
               <StHashtag hashtag={hashtag}>
                 {hashtag}
-                <button
-                  style={StButton}
-                  onClick={() => dispatch(setHashtagsDelete(hashtag))}
-                >
+                <button style={StButton} onClick={() => dispatch(setHashtagsDelete(hashtag))}>
                   x
                 </button>
               </StHashtag>
@@ -59,7 +42,7 @@ const PostPreview = () => {
       </div>
 
       <StBody>
-        {body.split("\n").map((line,index) => {
+        {body.split('\n').map((line, index) => {
           return (
             <span key={index}>
               {line}
@@ -67,15 +50,11 @@ const PostPreview = () => {
             </span>
           );
         })}
-        <StImageWrapper>
-          {imageUrl && <img src={imageUrl} alt="Uploaded" />}
-        </StImageWrapper>
+        <StImageWrapper>{localimages && <img src={localimages} alt="Uploaded" />}</StImageWrapper>
       </StBody>
 
       <StNotices>{notices}</StNotices>
-      
     </StPostPreview>
-    
   );
 };
 

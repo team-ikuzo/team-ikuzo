@@ -6,6 +6,8 @@ import { RouterProvider } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import { store } from './redux/store';
+import { useEffect } from 'react';
+import { supabase } from './supabase';
 const queryClient = new QueryClient();
 
 const Globalstyle = createGlobalStyle`

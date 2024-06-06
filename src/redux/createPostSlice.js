@@ -1,17 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const createPostSlice = createSlice({
-  name: "createPostSlice",
+  name: 'createPostSlice',
   initialState: {
-    title: "",
-    body: "",
-    name: "김민수",
-    job: "프론트엔드 개발자",
+    title: '',
+    body: '',
+    name: '',
+    job: '',
     hashtags: [],
     likesCount: 0,
     commentsCount: 2,
-    notices: "",
-    image: null,
+    notices: '',
+    images: null,
+    localimages: null
   },
 
   reducers: {
@@ -36,9 +37,7 @@ const createPostSlice = createSlice({
     },
 
     setHashtagsDelete: (state, action) => {
-      state.hashtags = state.hashtags.filter(
-        (hashtag) => hashtag !== action.payload
-      );
+      state.hashtags = state.hashtags.filter((hashtag) => hashtag !== action.payload);
     },
 
     setLikesCount: (state, action) => {
@@ -53,10 +52,22 @@ const createPostSlice = createSlice({
       state.notices = action.payload;
     },
 
-    setImage: (state, action) => {
-      state.image = action.payload;
+    addlocalimages: (state, action) => {
+      state.localimages = action.payload;
     },
-  },
+
+    removelocalimages: (state, action) => {
+      state.localimages = '';
+    },
+
+    addImage: (state, action) => {
+      state.images = action.payload;
+    },
+
+    removeImage: (state, action) => {
+      state.images = '';
+    }
+  }
 });
 
 export const {
@@ -69,6 +80,9 @@ export const {
   setLikesCount,
   setCommentsCount,
   setNotices,
-  setImage,
+  addImage,
+  removeImage,
+  addlocalimages,
+  removelocalimages
 } = createPostSlice.actions;
 export default createPostSlice.reducer;
