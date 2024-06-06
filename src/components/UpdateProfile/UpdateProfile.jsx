@@ -1,21 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { updateIntroduction, updateTags, updateTitle } from "@/redux/slices/updateProfileSlice";
+import { updateImage, updateIntroduction, updateTags, updateTitle } from "@/redux/slices/updateProfileSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/supabase";
 
 
 
 const UpdateProfile = () => {
-    const photoInput = useRef();
     const { id } = useParams();
     const [title, setTitle] = useState("");
     const [introduction, setIntroduction] = useState("");
     const [tags, setTags] = useState([]);
 
-
-    const [image, setImage] = useState("");
     const [profileUrl, setProfileUrl] = useState('');
     const fileInputRef = useRef(null);
 
@@ -30,15 +27,12 @@ const UpdateProfile = () => {
 
         const { data } = await supabase.storage
             .from('profile_image')
-            //.delete(`profileImg_${id}.png`)
             .upload(`profileImg_${id}.png`, file);
 
         setProfileUrl(
-            `https://<project>.supabase.co/storage/v1/object/public/profile_image/${data.path}`
+            `https://wmgakxxvdhvxoawgvdko.supabase.co/storage/v1/object/public/profile_image/${data.path}`
         );
     }
-
-
 
     const navigate = useNavigate();
 
@@ -56,7 +50,7 @@ const UpdateProfile = () => {
                 setTitle(data.display_name)
                 setIntroduction(data.introduction)
                 setTags(data.hashtags)
-                //setImage(data.profile_image_path)
+                setProfileUrl(data.profile_image_path)
                 return data;
             } catch (error) {
                 console.log(error)
@@ -81,6 +75,9 @@ const UpdateProfile = () => {
         dispatch(
             updateTags({ tags })
         );
+        dispatch(
+            updateImage({ profileUrl })
+        );
 
         const { error } = await supabase
             .from('users')
@@ -88,7 +85,7 @@ const UpdateProfile = () => {
                 display_name: title,
                 introduction: introduction,
                 hashtags: tags,
-                profile_image_path: image
+                profile_image_path: profileUrl
             })
             .eq('user_id', id)
         if (error) {
@@ -119,20 +116,10 @@ const UpdateProfile = () => {
         deleteImg();
     }, []);
 
-    //src={image} alt={`${title}'s profile`}
     return (
         <StProfile>
             <StProfileHeader>
                 <div>
-                    {/* <input
-                        onChange={(e) => handleFileInputChange(e.target.files)}
-                        type='file'
-                        ref={fileInputRef}
-                        className='hidden'
-                        style={{
-                            display: "none"
-                        }}
-                    /> */}
                     <img
                         width={170}
                         height={170}
