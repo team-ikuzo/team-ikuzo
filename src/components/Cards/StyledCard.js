@@ -35,6 +35,15 @@ export const StHashtags = styled.div`
   }
 `;
 
+export const NoResult = styled.p`
+  display: flex;
+  justify-content: center;
+  width: 500px;
+  height: 10px;
+  color: white;
+  font-weight: 900;
+`;
+
 export const StTitle = styled.h3`
   font-weight: bold;
   font-size: 24px;
@@ -45,6 +54,13 @@ export const StContent = styled.p`
   font-size: 14px;
   line-height: 20px;
   color: white;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  word-break: keep-all;
 `;
 
 export const StProfileImage = styled.img`

@@ -40,9 +40,20 @@ export const StContent = styled.p`
   font-size: 14px;
   line-height: 20px;
   color: white;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  word-break: keep-all; // 문단으로 끊어져서 줄바꿈 됨
 `;
 
-export const StProfileImage = styled.img``;
+export const StProfileImage = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+`;
 
 export const StProfileDummyImage = styled.div`
   width: 48px;
@@ -77,12 +88,26 @@ export const StCountBox = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
 `;
 
-export const StCount = styled.p`
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+export const StCount = styled.div`
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+  & p {
+    padding-top: 4px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  & svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+  }
 `;
 
 export const StLink = styled(Link)`

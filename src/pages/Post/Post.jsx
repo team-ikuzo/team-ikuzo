@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { supabase } from '@/supabase';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPost, toggleLike, submitApplication } from '../../redux/slices/postSlice';
 import styled from 'styled-components';
-import { supabase } from '@/supabase';
+import { fetchPost, submitApplication, toggleLike } from '../../redux/slices/postSlice';
+import { Assignments } from './Assignments';
 import Modal from './Modal'; // Modal 컴포넌트 임포트
 
 // 스타일드 컴포넌트
@@ -106,7 +107,7 @@ const HashTags = styled.div`
 
 const MediaPart = styled.div`
   max-width: 300px;
-  max-height: 250px;
+  height: auto;
 `;
 
 const ApplyButton = styled.button`
@@ -179,12 +180,14 @@ const Post = () => {
   const handleSubmitApplication = async () => {
     if (userId) {
       try {
-        await dispatch(submitApplication({
-          userId,
-          postId: id,
-          hashtags: [application.part], // 배열로 변환
-          body: application.content
-        })).unwrap();
+        await dispatch(
+          submitApplication({
+            userId,
+            postId: id,
+            hashtags: [application.part], // 배열로 변환
+            body: application.content
+          })
+        ).unwrap();
         console.log('Application submitted successfully');
         setIsModalOpen(false);
       } catch (error) {
@@ -261,6 +264,7 @@ const Post = () => {
         <br />
         <button onClick={handleSubmitApplication}>지원하기</button>
       </Modal>
+      {post?.author_id === userId && <Assignments postId={id} />}
     </PostContainer>
   );
 };

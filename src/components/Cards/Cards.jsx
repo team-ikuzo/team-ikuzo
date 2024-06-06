@@ -1,32 +1,35 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabase';
 import {
-  StCardContainer,
+  NoResult,
   StCard,
+  StCardContainer,
   StContent,
   StCount,
   StCountBox,
   StHashtags,
+  StInfo,
   StNameCard,
   StProfileImage,
-  StInfo,
   StTitle
 } from './StyledCard';
-import { useNavigate } from 'react-router-dom';
 
 const Cards = ({ user, order, post }) => {
   // console.log(user);
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
+  console.log(user);
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.from('posts').select('*');
+      const { data, error } = await supabase.from('posts').select('*').eq('author_id', user.user_id);
       if (error) {
         console.log('Error fetching posts:', error);
       } else {
         console.log('Fetched posts:', data);
         const sortedPosts = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
         setPosts(sortedPosts);
       }
     };
@@ -46,30 +49,34 @@ const Cards = ({ user, order, post }) => {
 
   return (
     <>
-      {posts.map((post) => {
-        return (
-          <StCardContainer key={post.id} onClick={() => navigate(`/post/${post.id}`)}>
-            <StCard>
-              <StHashtags>
-                {post.hashtags && post.hashtags.map((hashtag, index) => <p key={index}>{hashtag}</p>)}
-              </StHashtags>
-              <StTitle>{post.title}</StTitle>
-              <StContent>{post.body}</StContent>
-              <StNameCard>
-                <StProfileImage src={user.profile_image_path} />
-                <StInfo>
-                  <p className="name">{user.display_name}</p>
-                  <p className="job">{user.job}</p>
-                </StInfo>
-              </StNameCard>
-              <StCountBox>
-                <StCount>🖤{post.likes_count}</StCount>
-                {/* <StCount>💬{post.comments_count}</StCount> */}
-              </StCountBox>
-            </StCard>
-          </StCardContainer>
-        );
-      })}
+      {posts.length > 0 ? (
+        posts.map((post) => {
+          return (
+            <StCardContainer key={post.id} onClick={() => navigate(`/post/${post.id}`)}>
+              <StCard>
+                <StHashtags>
+                  {post.hashtags && post.hashtags.map((hashtag, index) => <p key={index}>{hashtag}</p>)}
+                </StHashtags>
+                <StTitle>{post.title}</StTitle>
+                <StContent>{post.body}</StContent>
+                <StNameCard>
+                  <StProfileImage src={user.profile_image_path} />
+                  <StInfo>
+                    <p className="name">{user.display_name}</p>
+                    <p className="job">{user.job}</p>
+                  </StInfo>
+                </StNameCard>
+                <StCountBox>
+                  <StCount>🖤{post.likes_count}</StCount>
+                  {/* <StCount>💬{post.comments_count}</StCount> */}
+                </StCountBox>
+              </StCard>
+            </StCardContainer>
+          );
+        })
+      ) : (
+        <NoResult></NoResult>
+      )}
     </>
   );
 };
