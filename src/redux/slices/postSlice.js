@@ -5,10 +5,10 @@ import { supabase } from '@/supabase';
 export const fetchPost = createAsyncThunk('post/fetchPost', async (id) => {
   const { data: post, error: postError } = await supabase
     .from('posts')
-    .select('*')
+    .select('*, users(profile_image_path)')
     .eq('id', id)
     .single();
-  
+
   if (postError) {
     throw Error(postError.message);
   }
@@ -114,8 +114,18 @@ const postSlice = createSlice({
     loading: false,
     error: null,
     likes: [],
+    hashtags: [],
   },
-  reducers: {},
+  reducers: {
+    setHashtags: (state, action) => {
+      if (!state.hashtags.includes(action.payload)) {
+        state.hashtags.push(action.payload);
+      }
+    },
+    setHashtagsDelete: (state, action) => {
+      state.hashtags = state.hashtags.filter((hashtag) => hashtag !== action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPost.pending, (state) => {
@@ -154,5 +164,6 @@ const postSlice = createSlice({
   },
 });
 
+export const { setHashtags, setHashtagsDelete } = postSlice.actions;
 export default postSlice.reducer;
 export { postSlice };

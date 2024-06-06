@@ -14,7 +14,7 @@ const ModalBackdrop = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background-color: #45454576;
+  background-color: #4545453e;
   padding: 30px;
   border-radius: 10px;
   max-width: 500px;
@@ -32,14 +32,14 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, children }) => {
   if (!isOpen) return null;
 
   return (
     <ModalBackdrop>
       <ModalContent>
         {children} <br />
-        <CloseButton onClick={onClose}>닫기</CloseButton>
+
       </ModalContent>
     </ModalBackdrop>
   );
