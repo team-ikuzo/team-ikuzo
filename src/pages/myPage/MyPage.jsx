@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import {
-  StContainer,
-  StMain,
-  StProfile,
-  StProfileHeader,
-  StProfilePhoto,
-  StProfileInfo,
-  StProfileTitle,
-  StProfileLink,
-  StIntroduction,
-  StIntroductionTitle,
-  StTag,
-  StProfileButton,
-  StSectionDevider,
-  StTabs,
-  StTabButton,
-  StPosts
-} from './StyledMyPage';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Cards } from '../../components/Cards';
 import { supabase } from '../../supabase';
-import { useNavigate } from 'react-router-dom';
+import {
+  StContainer,
+  StIntroduction,
+  StIntroductionTitle,
+  StMain,
+  StPosts,
+  StProfile,
+  StProfileButton,
+  StProfileHeader,
+  StProfileInfo,
+  StProfilePhoto,
+  StProfileTitle,
+  StSectionDevider,
+  StTabButton,
+  StTabs,
+  StTag
+} from './StyledMyPage';
 
 function MyPage() {
   const [users, setUsers] = useState([]);
@@ -84,7 +83,7 @@ function MyPage() {
                     {user.introduction}
                   </StIntroduction>
 
-                  {user.hashtags.map((tag, index) => (
+                  {user.hashtags?.map((tag, index) => (
                     <StTag key={index}>{tag}</StTag>
                   ))}
 
