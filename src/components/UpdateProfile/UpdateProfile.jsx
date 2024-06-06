@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { updateIntroduction, updateTags, updateTitle } from "@/redux/slices/updateProfileSlice";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,7 +13,32 @@ const UpdateProfile = () => {
     const [title, setTitle] = useState("");
     const [introduction, setIntroduction] = useState("");
     const [tags, setTags] = useState([]);
+
+
     const [image, setImage] = useState("");
+    const [profileUrl, setProfileUrl] = useState('');
+    const fileInputRef = useRef(null);
+
+    async function handleFileInputChange(files) {
+        const [file] = files;
+
+        if (!file) {
+            return;
+        }
+
+        deleteStorage();
+
+        const { data } = await supabase.storage
+            .from('profile_image')
+            //.delete(`profileImg_${id}.png`)
+            .upload(`profileImg_${id}.png`, file);
+
+        setProfileUrl(
+            `https://<project>.supabase.co/storage/v1/object/public/profile_image/${data.path}`
+        );
+    }
+
+
 
     const navigate = useNavigate();
 
@@ -31,7 +56,7 @@ const UpdateProfile = () => {
                 setTitle(data.display_name)
                 setIntroduction(data.introduction)
                 setTags(data.hashtags)
-                setImage(data.profile_image_path)
+                //setImage(data.profile_image_path)
                 return data;
             } catch (error) {
                 console.log(error)
@@ -69,48 +94,70 @@ const UpdateProfile = () => {
         if (error) {
             throw Error(error.message);
         }
+
+        // const imageFile = event.target.files[0]
+        // const { data, error } = await supabase.storage
+        //     .from('profile_image')
+        //     .upload(image, imageFile)
+
         navigate(`/myPages`);
     };
 
-    const updateImg = () => {
-        photoInput.current.click();
-    }
-
-    const onChangeImage = (e) => {
-        // const file = photoInput.current.files[0];
-        // const reader = new FileReader();
-        // reader.readAsDataURL(file);
-        // reader.onloadend = () => {
-        //     setImage(reader.result);
-        // };
-    }
-
     const deleteImg = () => {
-        setImage("");
+        deleteStorage();
+        const { data } = supabase.storage
+            .from('profile_image')
+            .getPublicUrl('default-profile.jpg');
+        setProfileUrl(data.publicUrl);
     }
+    const deleteStorage = () => {
+        const { data } = supabase.storage
+            .from('profile_image')
+            .remove(`profileImg_${id}.png`)
+    }
+    useEffect(() => {
+        deleteImg();
+    }, []);
 
+    //src={image} alt={`${title}'s profile`}
     return (
         <StProfile>
             <StProfileHeader>
-                <StProfilePhoto src={image} alt={`${title}'s profile`}>
+                <div>
+                    {/* <input
+                        onChange={(e) => handleFileInputChange(e.target.files)}
+                        type='file'
+                        ref={fileInputRef}
+                        className='hidden'
+                        style={{
+                            display: "none"
+                        }}
+                    /> */}
+                    <img
+                        width={170}
+                        height={170}
+                        src={profileUrl}
+                        alt='profile'
+                        style={{
+                            borderRadius: '20%',
+                            objectFit: 'cover'
+                        }}
+                    />
+
                     <StImgButtons>
-                        <StImgButton onClick={updateImg}>수정
+                        <StImgButton onClick={() => fileInputRef.current.click()}>수정
                             <input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => {
-                                    onChangeImage();
-                                }}
-                                ref={photoInput}
+                                onChange={(e) => handleFileInputChange(e.target.files)}
+                                ref={fileInputRef}
                                 style={{ display: "none" }}
                             />
                         </StImgButton>
                         <StImgButton onClick={deleteImg}>삭제</StImgButton>
                     </StImgButtons>
-                </StProfilePhoto>
-
+                </div>
                 <StProfileInfo>
-
                     <StProfileTitleInput
                         type="text"
                         placeholder={title}
@@ -151,6 +198,8 @@ const UpdateProfile = () => {
             </div>
 
         </StProfile>
+
+
     );
 };
 
@@ -168,14 +217,6 @@ const StProfileHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   position: relative;
-`;
-
-
-const StProfilePhoto = styled.div`
-  width: 170px;
-  height: 170px;
-  background-color: white;
-  border-radius: 20%;
 `;
 
 const StProfileInfo = styled.div`
@@ -266,7 +307,7 @@ const StImgButtons = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  top: 75%;
+  margin-top: 10px;
 `;
 
 const StImgButton = styled.button`
