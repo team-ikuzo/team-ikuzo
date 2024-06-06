@@ -1,14 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '@/supabase';
 
+// 게시글 가져오기
 export const fetchPost = createAsyncThunk('post/fetchPost', async (id) => {
-  const { data: post, error: postError } = await supabase.from('posts').select('*').eq('id', id).single();
-
+  const { data: post, error: postError } = await supabase
+    .from('posts')
+    .select('*')
+    .eq('id', id)
+    .single();
+  
   if (postError) {
     throw Error(postError.message);
   }
 
-  const { data: likes, error: likesError } = await supabase.from('likes').select('*').eq('post_id', id);
+  const { data: likes, error: likesError } = await supabase
+    .from('likes')
+    .select('*')
+    .eq('post_id', id);
 
   if (likesError) {
     throw Error(likesError.message);
@@ -17,6 +25,7 @@ export const fetchPost = createAsyncThunk('post/fetchPost', async (id) => {
   return { post, likes };
 });
 
+// 좋아요 토글
 export const toggleLike = createAsyncThunk('post/toggleLike', async ({ postId, userId }) => {
   const { data: existingLike, error: likeError } = await supabase
     .from('likes')
@@ -29,47 +38,74 @@ export const toggleLike = createAsyncThunk('post/toggleLike', async ({ postId, u
     throw Error(likeError.message);
   }
 
+  let newLikesCount;
+
   if (existingLike) {
-    const { data, error } = await supabase.from('likes').delete().eq('id', existingLike.id).select();
+    const { error: deleteError } = await supabase
+      .from('likes')
+      .delete()
+      .eq('id', existingLike.id);
 
-    if (error) {
-      throw Error(error.message);
+    if (deleteError) {
+      throw Error(deleteError.message);
     }
 
-    return { postId, userId, liked: false };
+    newLikesCount = await updateLikesCount(postId, -1);
   } else {
-    const { data, error } = await supabase.from('likes').insert({ post_id: postId, user_id: userId }).select().single();
+    const { error: insertError } = await supabase
+      .from('likes')
+      .insert({ post_id: postId, user_id: userId })
+      .single();
 
-    if (error) {
-      throw Error(error.message);
+    if (insertError) {
+      throw Error(insertError.message);
     }
 
-    return { postId, userId, liked: true };
+    newLikesCount = await updateLikesCount(postId, 1);
   }
+
+  return { postId, userId, newLikesCount };
 });
 
-export const submitApplication = createAsyncThunk(
-  'post/submitApplication',
-  async ({ userId, postId, hashtags, body }) => {
-    try {
-      const { data, error } = await supabase
-        .from('assignments')
-        .insert({ post_id: postId, hashtags, body })
-        .select()
-        .single();
+// 좋아요 수 업데이트
+const updateLikesCount = async (postId, increment) => {
+  const { data: post, error: fetchError } = await supabase
+    .from('posts')
+    .select('likes_count')
+    .eq('id', postId)
+    .single();
 
-      if (error) {
-        console.error('Error inserting application:', error);
-        throw Error(error.message);
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Catch block error:', error);
-      throw error;
-    }
+  if (fetchError) {
+    throw Error(fetchError.message);
   }
-);
+
+  const newLikesCount = post.likes_count + increment;
+
+  const { error: updateError } = await supabase
+    .from('posts')
+    .update({ likes_count: newLikesCount })
+    .eq('id', postId);
+
+  if (updateError) {
+    throw Error(updateError.message);
+  }
+
+  return newLikesCount;
+};
+
+// 지원하기
+export const submitApplication = createAsyncThunk('post/submitApplication', async ({ userId, postId, hashtags, body }) => {
+  const { data, error } = await supabase
+    .from('assignments')
+    .insert({ user_id: userId, post_id: postId, hashtags, body })
+    .single();
+
+  if (error) {
+    throw Error(error.message);
+  }
+
+  return data;
+});
 
 const postSlice = createSlice({
   name: 'post',
@@ -77,7 +113,7 @@ const postSlice = createSlice({
     post: null,
     loading: false,
     error: null,
-    likes: []
+    likes: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -96,11 +132,13 @@ const postSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(toggleLike.fulfilled, (state, action) => {
-        const { postId, userId, liked } = action.payload;
-        if (liked) {
-          state.likes.push({ post_id: postId, user_id: userId });
-        } else {
+        const { postId, userId, newLikesCount } = action.payload;
+        state.post.likes_count = newLikesCount;
+
+        if (state.likes.some((like) => like.post_id === postId && like.user_id === userId)) {
           state.likes = state.likes.filter((like) => like.post_id !== postId || like.user_id !== userId);
+        } else {
+          state.likes.push({ post_id: postId, user_id: userId });
         }
       })
       .addCase(submitApplication.pending, (state) => {
@@ -113,7 +151,7 @@ const postSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       });
-  }
+  },
 });
 
 export default postSlice.reducer;
