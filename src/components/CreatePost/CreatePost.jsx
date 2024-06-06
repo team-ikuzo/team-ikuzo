@@ -24,6 +24,7 @@ import {
   StImageDeleteBtn
 } from './StyledCreatePost';
 import { supabase } from '../../supabase';
+import { v4 as uuidv4 } from 'uuid';
 
 const CreatePost = () => {
   const dispatch = useDispatch();
@@ -54,31 +55,19 @@ const CreatePost = () => {
   const handleSave = async () => {
     try {
       let publicURL = imageURL;
-
+      let postId = uuidv4();
       if (imageFile) {
         // 이미지 업로드
         const { data: storageData, error: storageError } = await supabase.storage
           .from('post_image_storage')
-          .upload(`public/${imageFile.name}`, imageFile);
+          .upload(`${postId}/${imageFile.name}`, imageFile);
 
         if (storageError) {
           console.error('이미지 업로드 오류:', storageError);
           return;
         }
-
-        // 이미지 URL 가져오기
-        const { publicURL: newPublicURL, error: urlError } = supabase.storage
-          .from('post_image_storage')
-          .getPublicUrl(`public/${imageFile.name}`);
-
-        if (urlError) {
-          console.error('이미지 URL 가져오기 오류:', urlError);
-          return;
-        }
-
-        dispatch(setImageURL(newPublicURL));
-        publicURL = newPublicURL;
       }
+      const result = supabase.storage.from('post_image_storage').getPublicUrl(`${postId}/${imageFile.name}`);
 
       // 게시글 데이터 저장
       const { error: insertError } = await supabase.from('posts').insert({
@@ -86,7 +75,7 @@ const CreatePost = () => {
         body,
         hashtags,
         notice: notices,
-        posts_image_url: publicURL
+        post_image_url: result.data.publicUrl
       });
 
       if (insertError) {
