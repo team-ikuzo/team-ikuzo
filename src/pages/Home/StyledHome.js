@@ -4,6 +4,7 @@ export const StBackground = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   background-color: #1d1f21;
   display: flex;
   justify-content: center;

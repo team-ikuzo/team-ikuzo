@@ -1,10 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const StCardContainer = styled.div`
-  cursor: pointer;
-`;
-
 export const StCard = styled.div`
   width: 280px;
   background-color: #4c4c4c;
@@ -16,7 +12,6 @@ export const StCard = styled.div`
   a {
     text-decoration: none;
   }
-  border-color: white;
 `;
 
 export const StHashtags = styled.div`
@@ -35,15 +30,6 @@ export const StHashtags = styled.div`
   }
 `;
 
-export const NoResult = styled.p`
-  display: flex;
-  justify-content: center;
-  width: 500px;
-  height: 10px;
-  color: white;
-  font-weight: 900;
-`;
-
 export const StTitle = styled.h3`
   font-weight: bold;
   font-size: 24px;
@@ -60,10 +46,16 @@ export const StContent = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
-  word-break: keep-all;
+  word-break: keep-all; // 문단으로 끊어져서 줄바꿈 됨
 `;
 
 export const StProfileImage = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+`;
+
+export const StProfileDummyImage = styled.div`
   width: 48px;
   height: 48px;
   border-radius: 24px;
@@ -96,12 +88,26 @@ export const StCountBox = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
 `;
 
-export const StCount = styled.p`
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+export const StCount = styled.div`
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+  & p {
+    padding-top: 4px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  & svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+  }
 `;
 
 export const StLink = styled(Link)`

@@ -2,9 +2,12 @@ import { Input } from '@/components/LoginInput';
 import { Page } from '@/components/Page';
 import { supabase } from '@/supabase';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StBackground, StButtons, StDiv, StForm, StInput, StTitle } from './StyledSignUp';
 
 export const SignUp = () => {
+  const [isLoading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     email: '',
     password: '',
@@ -17,11 +20,16 @@ export const SignUp = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = inputs;
+    setLoading(true);
     try {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) return;
+      alert('인증메일이 전송되었습니다. 메일을 확인해주세요.');
+      navigate('/login');
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -52,7 +60,7 @@ export const SignUp = () => {
               />
             </StInput>
             <StButtons>
-              <button>회원가입</button>
+              <button disabled={isLoading}>{isLoading ? '처리중...' : '회원가입'}</button>
             </StButtons>
           </StForm>
         </StDiv>

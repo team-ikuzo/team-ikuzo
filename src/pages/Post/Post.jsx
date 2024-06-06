@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { supabase } from '@/supabase';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPost, toggleLike, submitApplication, setHashtags, setHashtagsDelete } from '../../redux/slices/postSlice';
 import styled from 'styled-components';
-import { supabase } from '@/supabase';
+import { fetchPost, setHashtags, setHashtagsDelete, submitApplication, toggleLike } from '../../redux/slices/postSlice';
+import { Assignments } from './Assignments';
 import Modal from './Modal'; // Modal 컴포넌트 임포트
 
 // 스타일드 컴포넌트
@@ -238,14 +239,23 @@ const Post = () => {
   const [application, setApplication] = useState({
     content: ''
   });
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setUsername('로딩중...');
       const {
         data: { user }
       } = await supabase.auth.getUser();
+      const postData = await supabase.from('posts').select('*').eq('id', id).single();
       if (user) {
         setUserId(user.id);
+        const { data } = await supabase
+          .from('users')
+          .select('display_name')
+          .eq('user_id', postData.data.author_id)
+          .single();
+        setUsername(data.display_name);
       } else {
         console.error('No user found');
       }
@@ -295,7 +305,7 @@ const Post = () => {
           submitApplication({
             userId,
             postId: id,
-            hashtags, // 선택된 해시태그 사용
+            hashtags: [application.part],
             body: application.content
           })
         ).unwrap();
@@ -315,12 +325,14 @@ const Post = () => {
   if (error) return <div>게시글을 찾을 수 없습니다.</div>;
   if (!post) return <div>게시글이 존재하지 않습니다.</div>;
 
+  console.log(post.post_image_url);
+
   return (
     <PostContainer>
       <TopSection>
         <PostImage src={post.users.profile_image_path || 'https://via.placeholder.com/800'} alt="Author profile" />
         <UserInf>
-          <UserName>{post.author_name}</UserName>
+          <UserName>{username}</UserName>
           <UserJob>{post.job}</UserJob>
         </UserInf>
         <LikesSection>
@@ -332,7 +344,7 @@ const Post = () => {
       </TopSection>
       <PostTitle>{post.title}</PostTitle>
       <PostNotice>공지사항</PostNotice>
-     <PostNoticeBpdy> {post.notice}</PostNoticeBpdy>
+      <PostNoticeBpdy> {post.notice}</PostNoticeBpdy>
       <SectionTitle>프로젝트 및 팀 소개</SectionTitle>
       <PostingSection>{post.body}</PostingSection>
       <SectionTitle>모집 분야</SectionTitle>
@@ -397,6 +409,7 @@ const Post = () => {
           </ButtonContainer>
         </ModalContent>
       </Modal>
+      {post?.author_id === userId && <Assignments postId={id} />}
     </PostContainer>
   );
 };

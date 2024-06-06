@@ -1,41 +1,81 @@
 import { Input } from '@/components/LoginInput';
 import { Page } from '@/components/Page';
 import { supabase } from '@/supabase';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { StBackground, StButtons, StDiv, StForm, StInput, StTitle } from './StyledCreateProfile';
+import {
+  StBackground,
+  StButtons,
+  StDefaultPreview,
+  StDiv,
+  StForm,
+  StInput,
+  StLabel,
+  StPreview,
+  StTitle
+} from './StyledCreateProfile';
 
 import { useNavigate } from 'react-router-dom';
 
 export const CreateProfile = () => {
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
   const [isProfile, setIsProfile] = useState(false);
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    navigate('/login');
-  };
-
+  const [imageFile, setImageFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const imgRef = useRef(null);
   const [inputs, setInputs] = useState({
     nickname: '',
     birthDate: '',
     gender: ''
   });
+  const bucket = 'profile_image';
+  const FILE_NAME = 'profileImage';
+  const fileUrl = `${FILE_NAME}_${userId}`;
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     setInputs((prev) => ({ ...prev, [name]: value }));
   };
-  console.log(inputs);
+
+  const onFileChange = (e) => {
+    const file = imgRef.current.files[0];
+    setImageFile(file);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImageUrl(reader.result);
+    };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { nickname, birthDate, gender } = inputs;
     try {
-      const { error } = await supabase.from('users').insert({
+      const { imageUploadResult, imageUploadError } = await supabase.storage.from(bucket).upload(fileUrl, imageFile);
+
+      if (imageUploadError) {
+        console.log(imageUploadError);
+        return;
+      }
+      const publicUrl = supabase.storage.from(bucket).getPublicUrl(fileUrl);
+      console.log(publicUrl);
+
+      const { dataUploadResult, dataUploadError } = await supabase.from('users').insert({
         display_name: nickname,
         birth_date: birthDate,
-        gender: gender
+        gender: gender,
+        profile_image_path: publicUrl.data.publicUrl,
+        hashtags: []
       });
-      if (error) return;
+      if (dataUploadError) return;
       setIsProfile(true);
     } catch (error) {
       setError(error);
@@ -51,6 +91,7 @@ export const CreateProfile = () => {
 
       const { data: profile } = await supabase.from('users').select('*').eq('user_id', user.id);
 
+      setUserId(user.id);
       if (profile.length > 0) setIsProfile(true);
     };
     getProfile();
@@ -64,6 +105,16 @@ export const CreateProfile = () => {
         <StDiv>
           <StTitle>YOUR PROFILE</StTitle>
           <StForm onSubmit={handleSubmit}>
+            {imageUrl ? <StPreview src={imageUrl} /> : <StDefaultPreview>이미지 없음</StDefaultPreview>}
+            <StLabel htmlFor="profile-image">이미지 선택</StLabel>
+            <input
+              id="profile-image"
+              ref={imgRef}
+              type="file"
+              accept="image/*"
+              onChange={onFileChange}
+              style={{ display: 'none' }}
+            />
             <StInput>
               <Input
                 name={'nickname'}

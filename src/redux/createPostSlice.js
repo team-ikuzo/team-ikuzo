@@ -35,6 +35,9 @@ const createPostSlice = createSlice({
     setHashtags: (state, action) => {
       state.hashtags = [...state.hashtags, action.payload];
     },
+    clearHashtags: (state, action) => {
+      state.hashtags = [];
+    },
 
     setHashtagsDelete: (state, action) => {
       state.hashtags = state.hashtags.filter((hashtag) => hashtag !== action.payload);
@@ -78,6 +81,7 @@ export const {
   setNotices,
   setImageURL,
   setLocalImageURL,
-  clearImage
+  clearImage,
+  clearHashtags
 } = createPostSlice.actions;
 export default createPostSlice.reducer;

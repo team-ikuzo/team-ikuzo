@@ -1,193 +1,168 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import { updateImage, updateIntroduction, updateTags, updateTitle } from "@/redux/slices/updateProfileSlice";
-import { useNavigate, useParams } from "react-router-dom";
-import { supabase } from "@/supabase";
-
-
+import { updateImage, updateIntroduction, updateTags, updateTitle } from '@/redux/slices/updateProfileSlice';
+import { supabase } from '@/supabase';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
 const UpdateProfile = () => {
-    const { id } = useParams();
-    const [title, setTitle] = useState("");
-    const [introduction, setIntroduction] = useState("");
-    const [tags, setTags] = useState([]);
+  const { id } = useParams();
+  const [title, setTitle] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [tags, setTags] = useState([]);
 
-    const [profileUrl, setProfileUrl] = useState('');
-    const fileInputRef = useRef(null);
+  const [profileUrl, setProfileUrl] = useState('');
+  const fileInputRef = useRef(null);
 
-    async function handleFileInputChange(files) {
-        const [file] = files;
+  async function handleFileInputChange(files) {
+    const [file] = files;
 
-        if (!file) {
-            return;
-        }
-
-        deleteStorage();
-
-        const { data } = await supabase.storage
-            .from('profile_image')
-            .upload(`profileImg_${id}.png`, file);
-
-        setProfileUrl(
-            `https://wmgakxxvdhvxoawgvdko.supabase.co/storage/v1/object/public/profile_image/${data.path}`
-        );
+    if (!file) {
+      return;
     }
 
-    const navigate = useNavigate();
+    deleteStorage();
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .eq('user_id', id)
-                    .single();
-                if (error) {
-                    throw Error(error.message);
-                }
-                setTitle(data.display_name)
-                setIntroduction(data.introduction)
-                setTags(data.hashtags)
-                setProfileUrl(data.profile_image_path)
-                return data;
-            } catch (error) {
-                console.log(error)
-            }
-        };
-        fetchUserData();
-    }, [])
-    const dispatch = useDispatch();
+    const { data } = await supabase.storage.from('profile_image').upload(`profileImg_${id}.png`, file);
 
-    const onSubmitHandler = async (e) => {
-        e.preventDefault();
-        if (title === "") {
-            alert("닉네임을 입력하세요");
-            return; // 아무것도 입력하지 않았을 때 dispatch 하지 않음
-        }
-        dispatch(
-            updateTitle({ title })
-        );
-        dispatch(
-            updateIntroduction({ introduction })
-        );
-        dispatch(
-            updateTags({ tags })
-        );
-        dispatch(
-            updateImage({ profileUrl })
-        );
+    setProfileUrl(`https://wmgakxxvdhvxoawgvdko.supabase.co/storage/v1/object/public/profile_image/${data.path}`);
+  }
 
-        const { error } = await supabase
-            .from('users')
-            .update({
-                display_name: title,
-                introduction: introduction,
-                hashtags: tags,
-                profile_image_path: profileUrl
-            })
-            .eq('user_id', id)
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const { data, error } = await supabase.from('users').select('*').eq('user_id', id).single();
         if (error) {
-            throw Error(error.message);
+          throw Error(error.message);
         }
-
-        // const imageFile = event.target.files[0]
-        // const { data, error } = await supabase.storage
-        //     .from('profile_image')
-        //     .upload(image, imageFile)
-
-        navigate(`/myPages`);
+        setTitle(data.display_name);
+        setIntroduction(data.introduction);
+        setTags(data.hashtags);
+        setProfileUrl(data.profile_image_path);
+        return data;
+      } catch (error) {
+        console.log(error);
+      }
     };
+    fetchUserData();
+  }, []);
+  const dispatch = useDispatch();
 
-    const deleteImg = () => {
-        deleteStorage();
-        const { data } = supabase.storage
-            .from('profile_image')
-            .getPublicUrl('default-profile.jpg');
-        setProfileUrl(data.publicUrl);
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    if (title === '') {
+      alert('닉네임을 입력하세요');
+      return; // 아무것도 입력하지 않았을 때 dispatch 하지 않음
     }
-    const deleteStorage = () => {
-        const { data } = supabase.storage
-            .from('profile_image')
-            .remove(`profileImg_${id}.png`)
+    dispatch(updateTitle({ title }));
+    dispatch(updateIntroduction({ introduction }));
+    dispatch(updateTags({ tags }));
+    dispatch(updateImage({ profileUrl }));
+
+    const { error } = await supabase
+      .from('users')
+      .update({
+        display_name: title,
+        introduction: introduction,
+        hashtags: tags,
+        profile_image_path: profileUrl
+      })
+      .eq('user_id', id);
+    if (error) {
+      throw Error(error.message);
     }
-    useEffect(() => {
-        deleteImg();
-    }, []);
 
-    return (
-        <StProfile>
-            <StProfileHeader>
-                <div>
-                    <img
-                        width={170}
-                        height={170}
-                        src={profileUrl}
-                        alt='profile'
-                        style={{
-                            borderRadius: '20%',
-                            objectFit: 'cover'
-                        }}
-                    />
+    // const imageFile = event.target.files[0]
+    // const { data, error } = await supabase.storage
+    //     .from('profile_image')
+    //     .upload(image, imageFile)
 
-                    <StImgButtons>
-                        <StImgButton onClick={() => fileInputRef.current.click()}>수정
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFileInputChange(e.target.files)}
-                                ref={fileInputRef}
-                                style={{ display: "none" }}
-                            />
-                        </StImgButton>
-                        <StImgButton onClick={deleteImg}>삭제</StImgButton>
-                    </StImgButtons>
-                </div>
-                <StProfileInfo>
-                    <StProfileTitleInput
-                        type="text"
-                        placeholder={title}
-                        defaultValue={title}
-                        onChange={(e) => {
-                            setTitle(e.target.value);
-                        }}
-                    />
-                </StProfileInfo>
+    navigate(`/myPage`);
+  };
 
+  const deleteImg = () => {
+    deleteStorage();
+    const { data } = supabase.storage.from('profile_image').getPublicUrl('default-profile.jpg');
+    setProfileUrl(data.publicUrl);
+  };
+  const deleteStorage = () => {
+    const { data } = supabase.storage.from('profile_image').remove(`profileImg_${id}.png`);
+  };
+  useEffect(() => {
+    deleteImg();
+  }, []);
 
-                <StProfileButton onClick={onSubmitHandler}>편집 종료</StProfileButton>
+  return (
+    <StProfile>
+      <StProfileHeader>
+        <div>
+          <img
+            width={170}
+            height={170}
+            src={profileUrl}
+            alt="profile"
+            style={{
+              borderRadius: '20%',
+              objectFit: 'cover'
+            }}
+          />
 
-            </StProfileHeader>
+          <StImgButtons>
+            <StImgButton onClick={() => fileInputRef.current.click()}>
+              수정
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileInputChange(e.target.files)}
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+              />
+            </StImgButton>
+            <StImgButton onClick={deleteImg}>삭제</StImgButton>
+          </StImgButtons>
+        </div>
+        <StProfileInfo>
+          <StProfileTitleInput
+            type="text"
+            placeholder={title}
+            defaultValue={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />
+        </StProfileInfo>
 
-            <StIntroduction>
-                <StIntroductionTitle>소개글</StIntroductionTitle>
-                <StIntroductionInput
-                    type="text"
-                    placeholder={introduction}
-                    defaultValue={introduction}
-                    onChange={(e) => {
-                        setIntroduction(e.target.value);
-                    }}
-                />
-            </StIntroduction>
+        <StProfileButton onClick={onSubmitHandler}>편집 종료</StProfileButton>
+      </StProfileHeader>
 
-            <div className="tags">
-                <StTagsInput
-                    type="text"
-                    placeholder={tags}
-                    defaultValue={tags}
-                    onChange={(e) => {
-                        const inputTags = e.target.value.split(/,| /).filter((tag) => tag !== '');
-                        setTags(inputTags);
-                    }}
-                />
-            </div>
+      <StIntroduction>
+        <StIntroductionTitle>소개글</StIntroductionTitle>
+        <StIntroductionInput
+          type="text"
+          placeholder={introduction}
+          defaultValue={introduction}
+          onChange={(e) => {
+            setIntroduction(e.target.value);
+          }}
+        />
+      </StIntroduction>
 
-        </StProfile>
-
-
-    );
+      <div className="tags">
+        <StIntroductionTitle>나의 기술</StIntroductionTitle>
+        <StTagsInput
+          type="text"
+          placeholder={tags}
+          defaultValue={tags}
+          onChange={(e) => {
+            const inputTags = e.target.value.split(/,| /).filter((tag) => tag !== '');
+            setTags(inputTags);
+          }}
+        />
+      </div>
+    </StProfile>
+  );
 };
 
 export default UpdateProfile;
@@ -217,7 +192,7 @@ const StProfileInfo = styled.div`
 
 const StProfileTitleInput = styled.input`
   border: none;
-  margin:30px 24px 0px 0px;
+  margin: 30px 24px 0px 0px;
   height: 80px;
   width: 300px;
   border-radius: 12px;
@@ -249,6 +224,7 @@ const StIntroduction = styled.p`
 `;
 
 const StIntroductionTitle = styled.h3`
+  color: white;
   font-size: 25px;
   margin-bottom: 20px;
   font-weight: bold;

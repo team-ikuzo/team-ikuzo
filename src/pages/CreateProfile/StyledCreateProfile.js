@@ -31,7 +31,6 @@ export const StDiv = styled.div`
   justify-content: center;
   align-items: center;
   width: 600px;
-  height: 700px;
   padding: 70px 130px 80px 130px;
   background-color: #4c4c4c;
   border-radius: 20px;
@@ -78,4 +77,40 @@ export const StTitle = styled.h2`
   font-size: 48px;
   font-weight: 900;
   color: white;
+`;
+
+export const StDefaultPreview = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 240px;
+  height: 240px;
+  color: white;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='20' ry='20' stroke='white' stroke-width='8' stroke-dasharray='6%2c 24' stroke-dashoffset='18' stroke-linecap='square'/%3e%3c/svg%3e");
+  border-radius: 20px;
+`;
+
+export const StPreview = styled.img`
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+`;
+
+export const StLabel = styled.label`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid white;
+  cursor: pointer;
+
+  margin: 16px 0 16px 0;
+  font-size: 16px;
+  color: white;
+
+  &:hover {
+    background-color: #6c6c6c;
+  }
 `;

@@ -1,33 +1,29 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/supabase';
-
 import { Page } from '@/components/Page';
+import { supabase } from '@/supabase';
+import { Card } from '@components/PostCard';
+import { useQuery } from '@tanstack/react-query';
 import { StBackground, StDiv } from './StyledHome';
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase.from('posts').select('*').limit(1);
-      if (error) {
-        console.error('Error fetching posts:', error);
-      } else {
-        console.log('Fetched posts:', data);
-        const sortedPosts = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        setPosts(sortedPosts);
-      }
-    };
-    fetchData();
-  }, []);
+  const { data, isLoading } = useQuery({
+    queryKey: ['posts'],
+    queryFn: () => supabase.from('posts').select(`*, users(display_name, profile_image_path)`)
+  });
+  const posts = data?.data ?? [];
+  console.log(posts);
 
   return (
     <Page>
       <StBackground>
         <StDiv>
-          {/* {posts.map((post) => (
-            <Card key={post.id} post={post} />
-          ))} */}
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            posts.map((post, i) => {
+              console.log(post);
+              return <Card key={i} post={post} />;
+            })
+          )}
         </StDiv>
       </StBackground>
     </Page>
