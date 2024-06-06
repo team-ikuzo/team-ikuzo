@@ -56,18 +56,19 @@ const CreatePost = () => {
     try {
       let publicURL = imageURL;
       let postId = uuidv4();
+      let imageId = uuidv4();
       if (imageFile) {
         // 이미지 업로드
         const { data: storageData, error: storageError } = await supabase.storage
           .from('post_image_storage')
-          .upload(`${postId}/${imageFile.name}`, imageFile);
+          .upload(`${postId}/${imageId}`, imageFile);
 
         if (storageError) {
           console.error('이미지 업로드 오류:', storageError);
           return;
         }
       }
-      const result = supabase.storage.from('post_image_storage').getPublicUrl(`${postId}/${imageFile.name}`);
+      const result = supabase.storage.from('post_image_storage').getPublicUrl(`${postId}/${imageId}`);
 
       // 게시글 데이터 저장
       const { error: insertError } = await supabase.from('posts').insert({
