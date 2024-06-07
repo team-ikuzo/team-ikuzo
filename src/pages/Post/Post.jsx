@@ -1,3 +1,4 @@
+import { Page } from '@/components/Page';
 import { supabase } from '@/supabase';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +11,7 @@ import Modal from './Modal'; // Modal 컴포넌트 임포트
 // 스타일드 컴포넌트
 const PostContainer = styled.div`
   width: 50%;
-  height: auto;
+  height: 100%;
   padding: 30px;
   margin: 30px auto;
   border: 1px solid #ddd;
@@ -230,6 +231,16 @@ const CloseButton = styled.button`
   }
 `;
 
+const StBackground = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #1d1f21;
+  display: flex;
+  justify-content: center;
+`;
+
 const Post = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -240,6 +251,7 @@ const Post = () => {
     content: ''
   });
   const [username, setUsername] = useState(null);
+  console.log(hashtags);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -248,6 +260,7 @@ const Post = () => {
         data: { user }
       } = await supabase.auth.getUser();
       const postData = await supabase.from('posts').select('*').eq('id', id).single();
+      console.log(postData);
       if (user) {
         setUserId(user.id);
         const { data } = await supabase
@@ -305,7 +318,7 @@ const Post = () => {
           submitApplication({
             userId,
             postId: id,
-            hashtags: [application.part],
+            hashtags,
             body: application.content
           })
         ).unwrap();
@@ -328,89 +341,93 @@ const Post = () => {
   console.log(post.post_image_url);
 
   return (
-    <PostContainer>
-      <TopSection>
-        <PostImage src={post.users.profile_image_path || 'https://via.placeholder.com/800'} alt="Author profile" />
-        <UserInf>
-          <UserName>{username}</UserName>
-          <UserJob>{post.job}</UserJob>
-        </UserInf>
-        <LikesSection>
-          <LikeButton onClick={handleLikeClick} className={isLiked ? 'liked' : ''}>
-            {isLiked ? '❤️' : '🤍'}
-          </LikeButton>
-          <div>{post.likes_count}</div>
-        </LikesSection>
-      </TopSection>
-      <PostTitle>{post.title}</PostTitle>
-      <PostNotice>공지사항</PostNotice>
-      <PostNoticeBpdy> {post.notice}</PostNoticeBpdy>
-      <SectionTitle>프로젝트 및 팀 소개</SectionTitle>
-      <PostingSection>{post.body}</PostingSection>
-      <SectionTitle>모집 분야</SectionTitle>
-      <HashContainer>
-        {post.hashtags && post.hashtags.map((tag, index) => <HashTags key={index}>{tag}</HashTags>)}
-      </HashContainer>
-      <SectionTitle>미디어</SectionTitle>
-      <MediaPart>
-        {post.post_image_url ? (
-          <img
-            style={{
-              objectFit: 'contain',
-              maxWidth: '400px'
-            }}
-            src={post.post_image_url}
-            alt="Post media"
-          />
-        ) : (
-          <div>첨부 이미지가 없습니다.</div>
-        )}
-      </MediaPart>
-      <ApplyButton onClick={handleApplyClick}>지원하기</ApplyButton>
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <ModalContent>
-          <Label>지원 파트를 선택하세요</Label>
-          <StSelect>
-            <select name="hashtag" onChange={handleSelectChange}>
-              <option value="Front-end">Front-end</option>
-              <option value="Back-end">Back-end</option>
-              <option value="Python">Python</option>
-              <option value="Java">Java</option>
-              <option value="Kotlin">Kotlin</option>
-              <option value="Spring">Spring</option>
-              <option value="JavaScript">JavaScript</option>
-              <option value="React">React</option>
-              <option value="NextJs">NextJs</option>
-              <option value="TypeScript">TypeScript</option>
-              <option value="Deep-learning">Deep-learning</option>
-              <option value="DataAnalysis">DataAnalysis</option>
-              <option value="UI/UX-Designer">UI/UX-Designer</option>
-              <option value="Unity">Unity</option>
-              <option value="C">C</option>
-            </select>
-          </StSelect>
-          <SelectedHashtagsContainer>
-            {hashtags.map((hashtag, index) => (
-              <SelectedHashtag key={index} onClick={() => dispatch(setHashtagsDelete(hashtag))}>
-                {hashtag}
-              </SelectedHashtag>
-            ))}
-          </SelectedHashtagsContainer>
-          <Label style={{ marginBottom: '10px' }}>지원사항</Label>
-          <TextArea
-            placeholder="간단한 자기소개를 입력하세요."
-            name="content"
-            value={application.content}
-            onChange={handleInputChange}
-          />
-          <ButtonContainer>
-            <SubmitButton onClick={handleSubmitApplication}>지원하기</SubmitButton>
-            <CloseButton onClick={handleCloseModal}>닫기</CloseButton>
-          </ButtonContainer>
-        </ModalContent>
-      </Modal>
-      {post?.author_id === userId && <Assignments postId={id} />}
-    </PostContainer>
+    <Page>
+      <StBackground>
+        <PostContainer>
+          <TopSection>
+            <PostImage src={post.users.profile_image_path || 'https://via.placeholder.com/800'} alt="Author profile" />
+            <UserInf>
+              <UserName>{username}</UserName>
+              <UserJob>{post.job}</UserJob>
+            </UserInf>
+            <LikesSection>
+              <LikeButton onClick={handleLikeClick} className={isLiked ? 'liked' : ''}>
+                {isLiked ? '❤️' : '🤍'}
+              </LikeButton>
+              <div>{post.likes_count}</div>
+            </LikesSection>
+          </TopSection>
+          <PostTitle>{post.title}</PostTitle>
+          <PostNotice>공지사항</PostNotice>
+          <PostNoticeBpdy> {post.notice}</PostNoticeBpdy>
+          <SectionTitle>프로젝트 및 팀 소개</SectionTitle>
+          <PostingSection>{post.body}</PostingSection>
+          <SectionTitle>모집 분야</SectionTitle>
+          <HashContainer>
+            {post.hashtags && post.hashtags.map((tag, index) => <HashTags key={index}>{tag}</HashTags>)}
+          </HashContainer>
+          <SectionTitle>미디어</SectionTitle>
+          <MediaPart>
+            {post.post_image_url ? (
+              <img
+                style={{
+                  objectFit: 'contain',
+                  maxWidth: '400px'
+                }}
+                src={post.post_image_url}
+                alt="Post media"
+              />
+            ) : (
+              <div>첨부 이미지가 없습니다.</div>
+            )}
+          </MediaPart>
+          <ApplyButton onClick={handleApplyClick}>지원하기</ApplyButton>
+          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+            <ModalContent>
+              <Label>지원 파트를 선택하세요</Label>
+              <StSelect>
+                <select name="hashtag" onChange={handleSelectChange}>
+                  <option value="Front-end">Front-end</option>
+                  <option value="Back-end">Back-end</option>
+                  <option value="Python">Python</option>
+                  <option value="Java">Java</option>
+                  <option value="Kotlin">Kotlin</option>
+                  <option value="Spring">Spring</option>
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="React">React</option>
+                  <option value="NextJs">NextJs</option>
+                  <option value="TypeScript">TypeScript</option>
+                  <option value="Deep-learning">Deep-learning</option>
+                  <option value="DataAnalysis">DataAnalysis</option>
+                  <option value="UI/UX-Designer">UI/UX-Designer</option>
+                  <option value="Unity">Unity</option>
+                  <option value="C">C</option>
+                </select>
+              </StSelect>
+              <SelectedHashtagsContainer>
+                {hashtags.map((hashtag, index) => (
+                  <SelectedHashtag key={index} onClick={() => dispatch(setHashtagsDelete(hashtag))}>
+                    {hashtag}
+                  </SelectedHashtag>
+                ))}
+              </SelectedHashtagsContainer>
+              <Label style={{ marginBottom: '10px' }}>지원사항</Label>
+              <TextArea
+                placeholder="간단한 자기소개를 입력하세요."
+                name="content"
+                value={application.content}
+                onChange={handleInputChange}
+              />
+              <ButtonContainer>
+                <SubmitButton onClick={handleSubmitApplication}>지원하기</SubmitButton>
+                <CloseButton onClick={handleCloseModal}>닫기</CloseButton>
+              </ButtonContainer>
+            </ModalContent>
+          </Modal>
+          {post?.author_id === userId && <Assignments postId={id} />}
+        </PostContainer>
+      </StBackground>
+    </Page>
   );
 };
 

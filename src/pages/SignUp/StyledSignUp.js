@@ -31,7 +31,6 @@ export const StDiv = styled.div`
   justify-content: center;
   align-items: center;
   width: 600px;
-  height: 700px;
   padding: 70px 130px 80px 130px;
   background-color: #4c4c4c;
   border-radius: 20px;

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import {
   clearHashtags,
@@ -12,6 +13,7 @@ import {
   setTitle
 } from '../../redux/createPostSlice';
 import { supabase } from '../../supabase';
+import { Page } from '../Page';
 import PostPreview from '../PostPreview/PostPreview';
 import {
   InnerContainer,
@@ -26,6 +28,16 @@ import {
   StSelect,
   StTitle
 } from './StyledCreatePost';
+
+const StBackground = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #1d1f21;
+  display: flex;
+  justify-content: center;
+`;
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -101,77 +113,81 @@ const CreatePost = () => {
   };
 
   return (
-    <OuterContainer>
-      <InnerContainer>
-        <RightPanel>
-          <StTitle>
-            [제목]
-            <br />
-            <input
-              type="text"
-              value={title}
-              placeholder="제목을 입력해주세요"
-              onChange={(e) => dispatch(setTitle(e.target.value))}
-            />
-          </StTitle>
+    <Page>
+      <StBackground>
+        <OuterContainer>
+          <InnerContainer>
+            <RightPanel>
+              <StTitle>
+                [제목]
+                <br />
+                <input
+                  type="text"
+                  value={title}
+                  placeholder="제목을 입력해주세요"
+                  onChange={(e) => dispatch(setTitle(e.target.value))}
+                />
+              </StTitle>
 
-          <StNotices>
-            [공지사항]
-            <br />
-            <input
-              type="text"
-              placeholder="공지사항 입력란"
-              value={notices}
-              onChange={(e) => dispatch(setNotices(e.target.value))}
-            />
-          </StNotices>
+              <StNotices>
+                [공지사항]
+                <br />
+                <input
+                  type="text"
+                  placeholder="공지사항 입력란"
+                  value={notices}
+                  onChange={(e) => dispatch(setNotices(e.target.value))}
+                />
+              </StNotices>
 
-          <StBody>
-            [내용]
-            <br />
-            <textarea
-              type="text"
-              placeholder="내용을 입력해주세요"
-              value={body}
-              onChange={(e) => dispatch(setBody(e.target.value))}
-            />
-          </StBody>
-          <StSelect>
-            [요구스택]
-            <br />
-            <select name="hashtag" onChange={(e) => dispatch(setHashtags(e.target.value))}>
-              <option value="Front-end">Front-end</option>
-              <option value="Back-end">Back-end</option>
-              <option value="Python">Python</option>
-              <option value="Java">Java</option>
-              <option value="Kotlin">Kotlin</option>
-              <option value="Spring">Spring</option>
-              <option value="JavaScript">JavaScript</option>
-              <option value="React">React</option>
-              <option value="NextJs">NextJs</option>
-              <option value="TypeScript">TypeScript</option>
-              <option value="Deep-learnig">Deep-learnig</option>
-              <option value="DataAnalysis">DataAnalysis</option>
-              <option value="UI/UX-Designer">UI/UX-Designer</option>
-              <option value="Unity">Unity</option>
-              <option value="C">C</option>
-            </select>
-          </StSelect>
-          <StImageUpload>
-            <label htmlFor="imageUpload">이미지 첨부</label>
-            <input type="file" multiple id="imageUpload" name="imageUpload" onChange={handleImageChange} />
+              <StBody>
+                [내용]
+                <br />
+                <textarea
+                  type="text"
+                  placeholder="내용을 입력해주세요"
+                  value={body}
+                  onChange={(e) => dispatch(setBody(e.target.value))}
+                />
+              </StBody>
+              <StSelect>
+                [요구스택]
+                <br />
+                <select name="hashtag" onChange={(e) => dispatch(setHashtags(e.target.value))}>
+                  <option value="Front-end">Front-end</option>
+                  <option value="Back-end">Back-end</option>
+                  <option value="Python">Python</option>
+                  <option value="Java">Java</option>
+                  <option value="Kotlin">Kotlin</option>
+                  <option value="Spring">Spring</option>
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="React">React</option>
+                  <option value="NextJs">NextJs</option>
+                  <option value="TypeScript">TypeScript</option>
+                  <option value="Deep-learnig">Deep-learnig</option>
+                  <option value="DataAnalysis">DataAnalysis</option>
+                  <option value="UI/UX-Designer">UI/UX-Designer</option>
+                  <option value="Unity">Unity</option>
+                  <option value="C">C</option>
+                </select>
+              </StSelect>
+              <StImageUpload>
+                <label htmlFor="imageUpload">이미지 첨부</label>
+                <input type="file" multiple id="imageUpload" name="imageUpload" onChange={handleImageChange} />
 
-            <StImageDeleteBtn onClick={handleRemoveImage}>이미지 삭제</StImageDeleteBtn>
-          </StImageUpload>
+                <StImageDeleteBtn onClick={handleRemoveImage}>이미지 삭제</StImageDeleteBtn>
+              </StImageUpload>
 
-          <StButton onClick={handleSave}>작성</StButton>
-        </RightPanel>
+              <StButton onClick={handleSave}>작성</StButton>
+            </RightPanel>
 
-        <LeftPanel>
-          <PostPreview />
-        </LeftPanel>
-      </InnerContainer>
-    </OuterContainer>
+            <LeftPanel>
+              <PostPreview />
+            </LeftPanel>
+          </InnerContainer>
+        </OuterContainer>
+      </StBackground>
+    </Page>
   );
 };
 

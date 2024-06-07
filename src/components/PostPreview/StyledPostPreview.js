@@ -26,11 +26,10 @@ export const StHashtags = styled.div`
 
 export const StHashtag = styled.p`
   border-radius: 12px;
-  box-sizing: border-box;
+
   font-size: 12px;
-  height: 24px;
   font-weight: bold;
-  padding: 6px 10px;
+  padding: 4px 10px;
   transition:
     transform 0.2s ease,
     background-color 0.2s ease;

@@ -29,9 +29,6 @@ export const CreateProfile = () => {
     birthDate: '',
     gender: ''
   });
-  const bucket = 'profile_image';
-  const FILE_NAME = 'profileImage';
-  const fileUrl = `${FILE_NAME}_${userId}`;
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -57,6 +54,9 @@ export const CreateProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const bucket = 'profile_image';
+    const FILE_NAME = 'profileImage';
+    const fileUrl = `${FILE_NAME}_${userId}`;
     const { nickname, birthDate, gender } = inputs;
     try {
       const { imageUploadResult, imageUploadError } = await supabase.storage.from(bucket).upload(fileUrl, imageFile);
@@ -65,9 +65,12 @@ export const CreateProfile = () => {
         console.log(imageUploadError);
         return;
       }
-      const publicUrl = supabase.storage.from(bucket).getPublicUrl(fileUrl);
-      console.log(publicUrl);
-
+      let publicUrl;
+      if (!imageFile) {
+        publicUrl = supabase.storage.from('profile_image').getPublicUrl('default-profile.jpg');
+      } else {
+        publicUrl = supabase.storage.from(bucket).getPublicUrl(fileUrl);
+      }
       const { dataUploadResult, dataUploadError } = await supabase.from('users').insert({
         display_name: nickname,
         birth_date: birthDate,

@@ -46,7 +46,7 @@ export const StContent = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
-  word-break: keep-all; // 문단으로 끊어져서 줄바꿈 됨
+  word-break: keep-all;
 `;
 
 export const StProfileImage = styled.img`
