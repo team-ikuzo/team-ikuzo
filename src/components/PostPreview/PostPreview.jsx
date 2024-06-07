@@ -1,8 +1,6 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { StPostPreview, StHashtags, StHashtag, StTitle, StBody, StNotices, StImageWrapper } from './StyledPostPreview';
-import { setHashtags, setHashtagsDelete } from '../../redux/createPostSlice';
-
+import { setHashtagsDelete } from '../../redux/createPostSlice';
+import { StBody, StHashtag, StHashtags, StImageWrapper, StNotices, StPostPreview, StTitle } from './StyledPostPreview';
 
 const PostPreview = () => {
   const dispatch = useDispatch();
@@ -15,7 +13,8 @@ const PostPreview = () => {
   const StButton = {
     border: 'none',
     backgroundColor: 'transparent',
-    pointer: 'cursor'
+    pointer: 'cursor',
+    marginLeft: '2px'
   };
 
   return (

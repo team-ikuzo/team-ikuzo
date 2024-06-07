@@ -109,6 +109,8 @@ export const StBody = styled.div`
     padding: 10px;
     color: black;
     transition: background-color 0.8s ease;
+    resize: none;
+
     &:focus {
       background-color: beige;
       outline: none;

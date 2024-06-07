@@ -1,6 +1,6 @@
 import { Page } from '@/components/Page';
+import { Card } from '@/components/PostCard';
 import { supabase } from '@/supabase';
-import { Card } from '@components/PostCard';
 import { useQuery } from '@tanstack/react-query';
 import { StBackground, StDiv } from './StyledHome';
 

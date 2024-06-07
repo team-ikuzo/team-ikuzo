@@ -61,6 +61,13 @@ export const SignUp = () => {
             </StInput>
             <StButtons>
               <button disabled={isLoading}>{isLoading ? '처리중...' : '회원가입'}</button>
+              <button
+                onClick={() => {
+                  navigate('/login');
+                }}
+              >
+                뒤로가기
+              </button>
             </StButtons>
           </StForm>
         </StDiv>
